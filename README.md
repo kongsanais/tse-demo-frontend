@@ -1,4 +1,4 @@
-# stock-pj
+# hr-project
 
 ## Project setup
 ```
