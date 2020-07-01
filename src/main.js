@@ -9,6 +9,8 @@ import Vue2Filters from "vue2-filters";
 import { imageUrl } from "@/services/constants";
 Vue.use(Vue2Filters);
 
+import vueHeadful from 'vue-headful';
+Vue.component('vue-headful', vueHeadful);
 
 new Vue({
   router,

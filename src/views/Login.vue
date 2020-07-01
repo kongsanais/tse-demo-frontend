@@ -1,13 +1,13 @@
 <template>
   <v-container >
-    <v-row align="center" justify="center">
+    <v-row align="center" justify="center" class="pt-10">
       <v-card style="width:400px;">
         <v-img
           class="white--text align-end"
           height="200px"
           src="@/assets/login_header.jpg"
         >
-          <v-card-title>Login</v-card-title>
+        <v-card-title>Login</v-card-title>
         </v-img>
 
         <v-card-text>

@@ -12,7 +12,7 @@ const product = sequelize.define(
         type: Sequelize.STRING,
         allowNull: false,
         defaultValue: "-"
-      },
+      },cv
       price: {
         type: Sequelize.NUMBER
         // allowNull defaults to true

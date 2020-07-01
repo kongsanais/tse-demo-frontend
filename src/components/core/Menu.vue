@@ -4,7 +4,7 @@
       <v-img src="@/assets/vue_display.jpg" alt="" width="100%" />
     </router-link>
 
-    <v-list>
+    <v-list v-if="$route.name!='register'">
       <v-list-item-group v-model="selectedMenu" mandatory color="primary">
         <v-subheader>MENUS</v-subheader>
         <v-list-item
@@ -23,6 +23,8 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
+
+
   </v-navigation-drawer>
 </template>
 
