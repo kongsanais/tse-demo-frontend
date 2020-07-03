@@ -1,10 +1,9 @@
 <template>
-  <v-navigation-drawer app permanent absolute dark src="@/assets/background_menu.jpg" xs>
+  <v-navigation-drawer app dark color="#1969C1"  >
     <router-link to="/" exact>
-      <v-img src="@/assets/vue_display.jpg" alt="" width="100%" />
+      <v-img src="@/assets/tsc-icon.png" alt="" width="100%" />
     </router-link>
-
-    <v-list v-if="$route.name!='register'">
+    <v-list>
       <v-list-item-group v-model="selectedMenu" mandatory color="primary">
         <v-subheader>MENUS</v-subheader>
         <v-list-item
@@ -23,9 +22,8 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
-
-
   </v-navigation-drawer>
+  
 </template>
 
 <script>
@@ -36,8 +34,8 @@ export default {
     return {
       selectedMenu: 0,
       menus: [
-        ["mdi-apps-box", "Stock", "/stock"],
-        ["mdi-chart-areaspline", "Report", "/report"],
+        ["mdi-apps-box", "Home", "/stock"],
+        ["mdi-chart-areaspline", "Job Openings", "/job"],
         ["mdi-file-table-box-multiple-outline", "About", "/about"],
       ],
     };
@@ -60,17 +58,19 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+
 .v-list-item-group .v-list-item--active{
   color: #fff !important;
   font-weight: bold;
 }
 
-.tile:hover {
-  background: green;
-}
 
-.tile:active {
+/* .tile:hover {
+  background: green;
+} */
+
+/* .tile:active {
   background: #05ab71;
-}
+} */
 </style>

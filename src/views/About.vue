@@ -1,5 +1,7 @@
 <template>
-  <h1>This is about now</h1>
+  <div>
+
+  </div>
 </template>
 
 <script>

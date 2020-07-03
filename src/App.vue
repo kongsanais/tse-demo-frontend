@@ -1,8 +1,9 @@
 <template>
   <v-app>
-    <Header v-if="$store.state.isLogged || $route.name == 'register'" />
-    <Menu v-if="$store.state.isLogged || $route.name == 'register'" />
+    <Header/>
+    <Menu />
     <Content />
+    <Footer />
   </v-app>
 </template>
 
@@ -10,6 +11,7 @@
 import Header from "@/components/core/Header";
 import Menu from "@/components/core/Menu";
 import Content from "@/components/core/Content";
+import Footer from "@/components/core/Footer";
 
 export default {
   name: "App",
@@ -17,6 +19,7 @@ export default {
     Header,
     Menu,
     Content,
+    Footer
   },
   mounted() {
     this.$store.dispatch({ type: "restoreLogin" });
