@@ -1,41 +1,123 @@
 <template>
   <v-container grid-list-xs>
-
     <v-card shaped>
       <v-list-item three-line>
         <v-list-item-content>
-          <v-list-item-title class="headline mb-1">Register</v-list-item-title>
+          <v-list-item-title class="headline mb-1"
+            >Register/สมัคร</v-list-item-title
+          >
           <v-list-item-subtitle>
             <v-form ref="form" v-model="valid" lazy-validation>
-              <v-text-field
-                v-model="name"
-                :counter="10"
-                :rules="nameRules"
-                label="Name"
-                required
-              ></v-text-field>
+              <v-row>
+                <!-- TH prefix  -->
+                <v-col class="d-flex" xl="2" lg="3" md="3" sm="12" cols="12">
+                  <v-select :items="items" label="คำนำหน้า" solo></v-select>
+                </v-col>
 
-              <v-text-field
-                v-model="email"
-                :rules="emailRules"
-                label="E-mail"
-                required
-              ></v-text-field>
+                <!-- TH fristname -->
+                <v-col class="d-flex" xl="5" lg="4" md="3" sm="12" cols="12">
+                  <v-text-field
+                    v-model="name"
+                    :rules="nameRules"
+                    label="ชื่อ"
+                    required
+                  >
+                  </v-text-field>
+                </v-col>
 
-              <v-select
-                v-model="select"
-                :items="items"
-                :rules="[(v) => !!v || 'Item is required']"
-                label="Item"
-                required
-              ></v-select>
+                <!-- TH lastname -->
+                <v-col class="d-flex" xl="5" lg="5" md="3" sm="12" cols="12">
+                  <v-text-field
+                    v-model="name"
+                    :rules="nameRules"
+                    label="นามสกุล"
+                    required
+                  >
+                  </v-text-field>
+                </v-col>
 
-              <v-checkbox
-                v-model="checkbox"
-                :rules="[(v) => !!v || 'You must agree to continue!']"
-                label="Do you agree?"
-                required
-              ></v-checkbox>
+                <!-- EN prefix -->
+                <v-col class="d-flex" xl="2" lg="3" md="3" sm="12" cols="12">
+                  <v-select :items="items" label="Prefix" solo></v-select>
+                </v-col>
+
+                <!-- EN fristname -->
+                <v-col class="d-flex" xl="5" lg="4" md="3" sm="12" cols="12">
+                  <v-text-field
+                    v-model="name"
+                    :rules="nameRules"
+                    label="Frist Name"
+                    required
+                  >
+                  </v-text-field>
+                </v-col>
+
+                <!-- EN lastname -->
+                <v-col class="d-flex" xl="5" lg="4" md="3" sm="12" cols="12">
+                  <v-text-field
+                    v-model="name"
+                    :rules="nameRules"
+                    label="Last Name"
+                    required
+                  >
+                  </v-text-field>
+                </v-col>
+
+                <!-- Address -->
+                <v-col cols="12" md="6">
+                  <v-textarea
+                    label="Address/ที่อยู่อาศัย"
+                    auto-grow
+                    outlined
+                    rows="5"
+                    row-height="25"
+                    shaped
+                  ></v-textarea>
+                </v-col>
+
+                <!--  Birthday  -->
+                <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
+                  <v-menu
+                    v-model="menu"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    transition="scale-transition"
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="date"
+                        label="Picker without buttons"
+                        prepend-icon="event"
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker
+                      v-model="date"
+                      @input="menu = false"
+                    ></v-date-picker>
+                  </v-menu>
+                </v-col>
+
+                <!-- Age -->
+                <v-col class="d-flex" xl="1" lg="1" md="1" sm="1" cols="12">
+                  <v-text-field v-model="age" label="Age" disabled sm solo>
+                  </v-text-field>
+                </v-col>
+
+                <!-- <v-col class="d-flex"  lg="6" md="6" sm="12" cols="12" >
+                  <v-text-field
+                    v-model="name"
+                    :counter="10"
+                    :rules="nameRules"
+                    label="Name" 
+                    required
+                  >
+                  </v-text-field>
+                </v-col> -->
+              </v-row>
 
               <v-row>
                 <v-spacer></v-spacer>
@@ -51,7 +133,6 @@
                   Reset
                 </v-btn>
               </v-row>
-
             </v-form>
           </v-list-item-subtitle>
         </v-list-item-content>
@@ -64,24 +145,14 @@
 export default {
   data: () => ({
     valid: true,
-    name: "",
-    nameRules: [
-      (v) => !!v || "Name is required",
-      (v) => (v && v.length <= 10) || "Name must be less than 10 characters",
-    ],
-    email: "",
-    emailRules: [
-      (v) => !!v || "E-mail is required",
-      (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
-    ],
-    select: null,
-    items: ["Item 1", "Item 2", "Item 3", "Item 4"],
     checkbox: false,
+    items: ["นาย", "นาง", "นางสาว"],
+    date: new Date().toISOString().substr(0, 10),
+    menu: false,
   }),
-
   methods: {
     validate() {
-      this.$refs.form.validate();
+      alert(this.$refs.form.validate());
     },
     reset() {
       this.$refs.form.reset();

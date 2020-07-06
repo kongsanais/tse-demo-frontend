@@ -1,7 +1,10 @@
 <template>
   <div>
     <v-app-bar color="#1969C1" dark app>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon
+        @click.stop="drawer = !drawer"
+        class="d-xl-none"
+      ></v-app-bar-nav-icon>
       <v-toolbar-title>TSC</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon>
@@ -13,7 +16,7 @@
       <v-btn icon>
         <v-icon>mdi-dots-vertical</v-icon>
       </v-btn>
-    </v-app-bar> 
+    </v-app-bar>
 
     <v-navigation-drawer
       dark
@@ -22,7 +25,7 @@
       absolute
       left
       temporary
-      width="100px"
+      width="260px"
     >
       <router-link to="/" exact>
         <v-img src="@/assets/tsc-icon.png" alt="" width="100%" />
@@ -49,18 +52,37 @@
     </v-navigation-drawer>
   </div>
 </template>
-
 <script>
 import Menu from "@/components/core/Menu";
 export default {
   data: () => ({
     drawer: false,
     group: null,
+    selectedMenu: 0,
+    menus: [
+      ["mdi-apps-box", "Home", "/stock"],
+      ["mdi-chart-areaspline", "Job Openings", "/job"],
+      ["mdi-file-table-box-multiple-outline", "About", "/about"],
+    ],
   }),
   watch: {
     group() {
       this.drawer = false;
     },
   },
+  methods: {
+    onClickMenu(link) {
+      this.$router.push(link).catch((err) => {});
+    },
+  },
 };
 </script>
+
+<style scoped>
+
+.v-list-item-group .v-list-item--active {
+  color: #fff !important;
+  font-weight: bold;
+}
+
+</style>

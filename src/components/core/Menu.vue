@@ -1,7 +1,7 @@
 <template>
   <v-navigation-drawer app dark color="#1969C1"  >
     <router-link to="/" exact>
-      <v-img src="@/assets/tsc-icon.png" alt="" width="100%" />
+      <v-img src="@/assets/tsc-icon.png" width="260px" />
     </router-link>
     <v-list>
       <v-list-item-group v-model="selectedMenu" mandatory color="primary">

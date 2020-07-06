@@ -8,7 +8,7 @@ const fs = require("fs-extra");
 const constants = require("./constant");
 
 router.get("/product", async (req,res)=>{
-  const result = await product.findAll({ order: Sequelize.literal("id DESC") });
+  const result = await product.findAll({ order:   ("id DESC") });
   res.json(result);
 })
 
