@@ -4,7 +4,7 @@
       class="text-center"
       cols="12"
     >
-      {{ new Date().getFullYear() }} — <strong>Vuetify</strong>
+      {{ new Date().getFullYear() }} — <strong>Thai Samsung Electronics Company Limited</strong>
     </v-col>
   </v-footer>
 </template>

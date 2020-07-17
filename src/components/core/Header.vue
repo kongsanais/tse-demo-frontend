@@ -1,18 +1,26 @@
 <template>
   <div>
-    <v-app-bar color="#1969C1" dark app>
+    <v-app-bar color="#ffff" light app>
       <v-app-bar-nav-icon
         @click.stop="drawer = !drawer"
         class="d-xl-none"
       ></v-app-bar-nav-icon>
-      <v-toolbar-title>TSC</v-toolbar-title>
+      <v-img
+        class="mx-2"
+        src="https://image.flaticon.com/icons/svg/882/882747.svg"
+        max-height="130"
+        max-width="130"
+        contain
+      ></v-img>
       <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
+
+
+      <div v-for="([title, route], index) in top_right_menu" :key="index" >
+       <v-btn  class="mr-2 d-none d-sm-flex" @click="onClickMenu(route)">
+       {{title}}
       </v-btn>
-      <v-btn icon>
-        <v-icon>mdi-filter</v-icon>
-      </v-btn>
+      </div>
+
       <v-btn icon>
         <v-icon>mdi-dots-vertical</v-icon>
       </v-btn>
@@ -30,6 +38,7 @@
       <router-link to="/" exact>
         <v-img src="@/assets/tsc-icon.png" alt="" width="100%" />
       </router-link>
+
       <v-list>
         <v-list-item-group v-model="selectedMenu" mandatory color="primary">
           <v-subheader>MENUS</v-subheader>
@@ -64,6 +73,11 @@ export default {
       ["mdi-chart-areaspline", "Job Openings", "/job"],
       ["mdi-file-table-box-multiple-outline", "About", "/about"],
     ],
+    top_right_menu: [
+      ["Home", "/stock"],
+      ["Job", "/job"],
+      ["About", "/about"],
+    ],
   }),
   watch: {
     group() {
@@ -79,10 +93,8 @@ export default {
 </script>
 
 <style scoped>
-
 .v-list-item-group .v-list-item--active {
   color: #fff !important;
   font-weight: bold;
 }
-
 </style>

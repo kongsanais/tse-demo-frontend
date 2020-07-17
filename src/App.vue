@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <Header/>
-    <Menu />
+    <!-- <Menu /> -->
     <Content />
     <Footer />
   </v-app>

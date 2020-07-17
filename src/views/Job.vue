@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row  class="pt-5 pl-5 pr-5" >
-      <v-col lg="6" md="6" sm="12" cols="12">
+      <v-col lg="5" md="6" sm="12" cols="12">
       <v-card>
         <v-card-title>
           <v-icon large left>
@@ -36,9 +36,8 @@ export default {
   data: () => ({
     item: 0,
     items: [
-      { text: "Production", icon: "mdi-clock" ,link: "/register" },
-      { text: "Operator", icon: "mdi-account",link: "/register" },
-      { text: "Technician", icon: "mdi-flag",link: "/register" },
+      { text: "Engineer & Management", icon: "mdi-clock" ,link: "/register" },
+      { text: "Production", icon: "mdi-account",link: "/register" }
     ],
   }),
   methods: {
