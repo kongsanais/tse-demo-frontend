@@ -8,8 +8,6 @@
           <v-list-item-subtitle>
             <v-form>
               <v-row>
-
-
                 <!-- Username -->
                 <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
                   <v-text-field

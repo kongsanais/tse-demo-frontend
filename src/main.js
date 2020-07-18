@@ -14,6 +14,11 @@ Vue.use(Vuelidate)
 import vueHeadful from 'vue-headful';
 Vue.component('vue-headful', vueHeadful);
 
+
+import JwPagination from 'jw-vue-pagination';
+Vue.component('jw-pagination', JwPagination);
+
+
 new Vue({
   router,
   store,
