@@ -10,7 +10,7 @@
           <span class="title font-weight-light">Information / ข่าวสาร</span>
         </v-card-title>
         <v-card-text>
-          <h4>Job Openings / ตำแหน่งงานที่เปิดรับ</h4>
+          <h4>Login & Register / เข้าสู่ระบบ & สมัคร</h4>
           <v-list >
             <!-- <v-subheader>text</v-subheader> -->
             <v-list-item-group v-model="item" color="primary">
@@ -36,8 +36,8 @@ export default {
   data: () => ({
     //  
     items: [
-      { text: "Engineer & Management", icon: "mdi-account-circle-outline" ,link: "/option_job" },
-      { text: "Production", icon: "mdi-account-cog-outline",link: "/job" }
+      { text: "Login", icon: "mdi-account-circle-outline" ,link: "" },
+      { text: "Register", icon: "mdi-account-cog-outline",link: "/register" }
     ],
   }),
   methods: {

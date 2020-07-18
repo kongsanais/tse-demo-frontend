@@ -3,77 +3,125 @@
     <v-card shaped>
       <v-list-item three-line>
         <v-list-item-content>
-          <v-list-item-title class="headline mb-1"
-            >Register/สมัคร</v-list-item-title
-          >
+          <v-list-item-title class="headline mb-1">Register / สมัคร </v-list-item-title>
+          {{applicant}}
           <v-list-item-subtitle>
-            <v-form ref="form" v-model="valid" lazy-validation>
+            <v-form>
               <v-row>
+
+
+                <!-- Username -->
+                <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                  <v-text-field
+                    v-model="applicant.username"
+                    label="Username"
+                  >
+                  </v-text-field>
+                </v-col>
+
+
+                <!-- Password -->
+                <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                  <v-text-field
+                    v-model="applicant.password"
+                    label="Password"
+                  >
+                  </v-text-field>
+                </v-col>
+
+
+                <!-- Confirm Password -->
+                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                  <v-text-field
+                    label="Confirm Password"
+                  >
+                  </v-text-field>
+                </v-col>
+
+
+                <!-- E-mail -->
+                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                  <v-text-field
+                    v-model="applicant.email"
+                    label="Email"
+                  >
+                  </v-text-field>
+                </v-col>
+
+
                 <!-- TH prefix  -->
                 <v-col class="d-flex" xl="2" lg="3" md="3" sm="12" cols="12">
-                  <v-select :items="items" label="คำนำหน้า" solo></v-select>
+                  <v-select   
+                      :items="data_th_prefix"  
+                       v-model="applicant.th_prefix"  
+                      label="คำนำหน้า" solo>
+                  </v-select>
                 </v-col>
+          
 
                 <!-- TH fristname -->
                 <v-col class="d-flex" xl="5" lg="4" md="3" sm="12" cols="12">
                   <v-text-field
-                    v-model="name"
-                    :rules="nameRules"
+                    v-model="applicant.th_firstname"
                     label="ชื่อ"
-                    required
                   >
                   </v-text-field>
                 </v-col>
+
+
 
                 <!-- TH lastname -->
                 <v-col class="d-flex" xl="5" lg="5" md="3" sm="12" cols="12">
                   <v-text-field
-                    v-model="name"
-                    :rules="nameRules"
+                    v-model="applicant.th_lastname"
                     label="นามสกุล"
-                    required
                   >
                   </v-text-field>
                 </v-col>
 
+
+
                 <!-- EN prefix -->
                 <v-col class="d-flex" xl="2" lg="3" md="3" sm="12" cols="12">
-                  <v-select :items="items" label="Prefix" solo></v-select>
+                  <v-select  label="Prefix"  :items="data_eng_prefix"  v-model="applicant.eng_prefix"  solo></v-select>
                 </v-col>
+
+
 
                 <!-- EN fristname -->
                 <v-col class="d-flex" xl="5" lg="4" md="3" sm="12" cols="12">
                   <v-text-field
-                    v-model="name"
-                    :rules="nameRules"
+                    v-model="applicant.eng_firstname"
                     label="Frist Name"
-                    required
                   >
                   </v-text-field>
                 </v-col>
+
 
                 <!-- EN lastname -->
                 <v-col class="d-flex" xl="5" lg="4" md="3" sm="12" cols="12">
                   <v-text-field
-                    v-model="name"
-                    :rules="nameRules"
+                    v-model="applicant.eng_lastname"
                     label="Last Name"
-                    required
                   >
                   </v-text-field>
                 </v-col>
 
+
                 <!-- Address -->
                 <v-col cols="12" md="6">
                   <v-textarea
-                    label="Address/ที่อยู่อาศัย"
+                    label="Address / ที่อยู่อาศัย"
                     auto-grow
                     outlined
                     rows="5"
                     row-height="25"
+                    v-model="applicant.eng_address"
                     shaped
                   ></v-textarea>
                 </v-col>
+
+
 
                 <!--  Birthday  -->
                 <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
@@ -84,55 +132,49 @@
                     transition="scale-transition"
                     min-width="290px"
                   >
+
                     <template v-slot:activator="{ on, attrs }">
                       <v-text-field
-                        v-model="date"
-                        label="Picker without buttons"
+                        v-model="applicant.date_birthday"
+                        label="Your Birthday"
                         prepend-icon="event"
                         readonly
                         v-bind="attrs"
                         v-on="on"
-                      ></v-text-field>
+                      >
+                      </v-text-field>
                     </template>
+
                     <v-date-picker
-                      v-model="date"
+                      v-model="applicant.date_birthday"
                       @input="menu = false"
+                      v-on:change="DateToAge(applicant.date_birthday)"
                     ></v-date-picker>
+                    
                   </v-menu>
                 </v-col>
 
+
+
                 <!-- Age -->
                 <v-col class="d-flex" xl="1" lg="1" md="1" sm="1" cols="12">
-                  <v-text-field v-model="age" label="Age" disabled sm solo>
+                  <v-text-field v-model="applicant.age" label="Age" disabled sm solo>
                   </v-text-field>
                 </v-col>
-
-                <!-- <v-col class="d-flex"  lg="6" md="6" sm="12" cols="12" >
-                  <v-text-field
-                    v-model="name"
-                    :counter="10"
-                    :rules="nameRules"
-                    label="Name" 
-                    required
-                  >
-                  </v-text-field>
-                </v-col> -->
+                
               </v-row>
 
               <v-row>
                 <v-spacer></v-spacer>
                 <v-btn
-                  :disabled="!valid"
                   color="success"
-                  class="ml-4 mr-1"
-                  @click="validate"
+                  class="ml-4 mr-4"
                 >
                   Next
                 </v-btn>
-                <v-btn color="error" class="mr-4 ml-1" @click="reset">
-                  Reset
-                </v-btn>
               </v-row>
+
+
             </v-form>
           </v-list-item-subtitle>
         </v-list-item-content>
@@ -142,24 +184,45 @@
 </template>
 
 <script>
+
+import { required, email, minLength, sameAs } from "vuelidate/lib/validators";
 export default {
   data: () => ({
-    valid: true,
-    checkbox: false,
-    items: ["นาย", "นาง", "นางสาว"],
     date: new Date().toISOString().substr(0, 10),
-    menu: false,
+    applicant : {
+        username:"",
+        password:"",
+        email:"",
+        th_prefix:"",
+        th_firstname:"",
+        th_lastname:"",
+        eng_prefix:"",
+        eng_firstname:"",
+        eng_lastname:"",
+        eng_address:"",
+        date_birthday: new Date().toISOString().substr(0, 10),
+        age: ""
+  },
+  data_th_prefix: ["นาย", "นาง", "นางสาว"],
+  data_eng_prefix: ["Mr", "Mrs", "Miss"],
+  menu: false,
   }),
   methods: {
-    validate() {
-      alert(this.$refs.form.validate());
-    },
-    reset() {
-      this.$refs.form.reset();
-    },
-    resetValidation() {
-      this.$refs.form.resetValidation();
-    },
+   DateToAge: function (bdate) {
+         var today = new Date();
+         var birthDate = new Date(bdate);
+         var Real_Age = today.getFullYear() - birthDate.getFullYear();
+         var m = today.getMonth() - birthDate.getMonth();
+         if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            Real_Age--;
+         }
+
+        //check value//
+        if(Real_Age == 0 || Real_Age < 0 ){
+           Real_Age = 0;   
+        }
+        this.applicant.age = Real_Age;
+    }
   },
 };
 </script>
