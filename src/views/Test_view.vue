@@ -17,24 +17,52 @@
                 <v-row>
                   <!-- Username -->
                   <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
-                    <v-text-field v-model="applicant.username" label="Username">
+                    <v-text-field 
+                    v-model="applicant.username" 
+                    label="Username"
+                    :rules="usernameRules"
+                    >
                     </v-text-field>
                   </v-col>
 
                   <!-- Password -->
                   <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
-                    <v-text-field v-model="applicant.password" label="Password">
-                    </v-text-field>
+                    <v-text-field
+                      v-model="applicant.password"
+                      label="Password"
+                      min="8"
+                      :append-icon="show_password ? 'visibility' : 'visibility_off'"
+                      @click:append="show_password = !show_password"
+                      :type="show_password ? 'password' : 'text'"
+                      :rules="passwordRules"
+                      required
+                    />
                   </v-col>
+
+
 
                   <!-- Confirm Password -->
                   <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
-                    <v-text-field label="Confirm Password"> </v-text-field>
+                    <v-text-field
+                      v-model="checkpassword"
+                      label="Confirm Password"
+                      min="8"
+                      :append-icon="show_password_con ? 'visibility' : 'visibility_off'"
+                      @click:append="show_password_con = !show_password_con"
+                      :type="show_password_con ? 'password' : 'text'"
+                      :rules="[(applicant.password === checkpassword) || 'Password must match']"
+                      required
+                    />
                   </v-col>
 
                   <!-- E-mail -->
                   <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
-                    <v-text-field v-model="applicant.email" label="Email">
+                    <v-text-field 
+                    v-model="applicant.email" 
+                    type="email" 
+                    label="Email"
+                    :rules="emailRules"
+                    >
                     </v-text-field>
                   </v-col>
 
@@ -44,14 +72,21 @@
                       :items="data_th_prefix"
                       v-model="applicant.th_prefix"
                       label="คำนำหน้า"
-                      solo
+                      :rules="th_prefixRules"
+                      outlined
                     >
                     </v-select>
                   </v-col>
 
                   <!-- TH fristname -->
                   <v-col class="d-flex" xl="5" lg="4" md="3" sm="12" cols="12">
-                    <v-text-field v-model="applicant.th_firstname" label="ชื่อ">
+                    
+                    <v-text-field 
+                    v-model="applicant.th_firstname" 
+                    label="ชื่อ"
+                    :rules="th_first_nameRules"
+                    >
+
                     </v-text-field>
                   </v-col>
 
@@ -60,9 +95,11 @@
                     <v-text-field
                       v-model="applicant.th_lastname"
                       label="นามสกุล"
+                      :rules="th_last_nameRules"
                     >
                     </v-text-field>
                   </v-col>
+
 
                   <!-- EN prefix -->
                   <v-col class="d-flex" xl="2" lg="3" md="3" sm="12" cols="12">
@@ -70,47 +107,72 @@
                       label="Prefix"
                       :items="data_eng_prefix"
                       v-model="applicant.eng_prefix"
-                      solo
+                      :rules="eng_prefixRules"
+                      outlined
                     ></v-select>
                   </v-col>
+
 
                   <!-- EN fristname -->
                   <v-col class="d-flex" xl="5" lg="4" md="3" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.eng_firstname"
                       label="Frist Name"
+                      :rules="eng_first_nameRules"
                     >
                     </v-text-field>
                   </v-col>
+
 
                   <!-- EN lastname -->
                   <v-col class="d-flex" xl="5" lg="4" md="3" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.eng_lastname"
                       label="Last Name"
+                      :rules="eng_last_nameRules"
                     >
                     </v-text-field>
                   </v-col>
 
                   <!-- Nationality -->
                   <v-col class="d-flex" xl="3" lg="3" md="3" sm="3" cols="12">
-                    <v-select :items="CountryList" label="Nationality"></v-select>
+                    <v-select
+                      :items="CountryList"
+                      label="Nationality"
+                      :rules="nationality_Rules"
+                    ></v-select>
                   </v-col>
 
                   <!-- Phone number -->
                   <v-col class="d-flex" xl="3" lg="3" md="3" sm="3" cols="12">
-                    <v-text-field label="Phone number" type="number" min="0"> </v-text-field>
+                    <v-text-field label="Phone number" type="number" min="0"
+                    :rules="phone_numberRules"
+                    >
+                    </v-text-field>
                   </v-col>
+
 
                   <!-- Phone number  family-->
                   <v-col class="d-flex" xl="3" lg="3" md="3" sm="3" cols="12">
-                    <v-text-field label="Phone number family"  type="number"  min="0" > </v-text-field>
+                    <v-text-field
+                      label="Phone number family"
+                      type="number"
+                      min="0"
+                      :rules="phone_numberRules"
+                    >
+                    </v-text-field>
                   </v-col>
+
 
                   <!-- Relationship -->
                   <v-col class="d-flex" xl="3" lg="3" md="2" sm="3" cols="12">
-                    <v-text-field label="Relationship"> </v-text-field>
+                            <v-select
+                            :items="data_Relationship"
+                            label="Relationship"
+                            :rules="relationshipRules"
+                          ></v-select>
                   </v-col>
+
 
                   <!-- Address -->
                   <v-col cols="12" md="6">
@@ -121,6 +183,7 @@
                       rows="5"
                       row-height="25"
                       v-model="applicant.eng_address"
+                      :rules="addressRules"
                       shaped
                     ></v-textarea>
                   </v-col>
@@ -314,9 +377,14 @@ export default {
     },
     data_th_prefix: ["นาย", "นาง", "นางสาว"],
     data_eng_prefix: ["Mr", "Mrs", "Miss"],
+    data_Relationship :["Father","Mother","Grandfather","Grandmather"],
+    checkpassword:"",
     menu: false,
     tabs: [
-      { id: 1, icon: "mdi-account", name: "FORM 1", href_tab: "#tab-1" },
+      { 
+        id: 1, 
+        icon: "mdi-account", 
+        name: "FORM 1", href_tab: "#tab-1" },
       {
         id: 2,
         icon: "mdi-clipboard-file-outline",
@@ -330,8 +398,29 @@ export default {
         href_tab: "#tab-3",
       },
     ],
+    show_password: true, 
+    show_password_con: true,
+    usernameRules:[v1=>!!v1 || "Username is required",v2=>!!/^[a-zA-Z]{8,}$/.test(v2)|| "Name must have at least 8 letters."],
+    passwordRules:[v1=>!!v1 || "Password is required", v2=>!!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(v2) || "Minimum eight characters, at least one letter and one number"],
+    emailRules:[v1=>!!v1 || "Email is required", v2=>!!/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(v2) || "Please Check Email"],
+
+    th_prefixRules:[v1=>!!v1 || "Please Select th-prefix"],
+    th_first_nameRules:[v1=> !! v1 || "Please Enter TH First Name"],
+    th_last_nameRules:[v1=> !! v1 || "Please Enter TH Last Name"],
+
+    eng_prefixRules:[v1=>!!v1 || "Please Enter eng-prefix"],
+    eng_first_nameRules:[v1=> !! v1 || "Please Enter  ENG First Name"],
+    eng_last_nameRules:[v1=> !! v1 || "Please Enter ENG Last Name"],
+
+    nationality_Rules:[v1=> !! v1 || "Please Select Your Nationality"],
+    phone_numberRules:[v1=> !! v1 || "Please Enter Phone Number"],
+    relationshipRules:[v1=> !! v1 || "Pleace Select Relationship"],
+
+    addressRules:[v1=> !! v1 || "Pleace Enter your Address"],
+
+
     tab: "tab-1",
-    CountryList : [
+    CountryList: [
       "Afghanistan",
       "Albania",
       "Algeria",
