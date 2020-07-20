@@ -18,6 +18,8 @@ Vue.component('vue-headful', vueHeadful);
 import JwPagination from 'jw-vue-pagination';
 Vue.component('jw-pagination', JwPagination);
 
+import vueCountryRegionSelect from 'vue-country-region-select'
+Vue.use(vueCountryRegionSelect)
 
 new Vue({
   router,
