@@ -435,9 +435,9 @@
 
               <!-- <input type="checkbox" id="checkbox" v-model="checked">
               <label for="checkbox">{{ checked }}</label> -->
-                
               <v-row>
                   <v-checkbox
+                    v-model="checked_ac"
                     class="ml-2"
                     label="Accept"
                     type="checkbox"
@@ -449,8 +449,8 @@
               
               <v-row>
                   <v-spacer></v-spacer>
-                  <v-btn class="primary mr-3" @click="changeTab(2)">
-                    Next
+                  <v-btn class="success mr-3" @click="changeTab(2)">
+                    Submit 
                   </v-btn>
               </v-row>
 
@@ -491,6 +491,7 @@ export default {
       job_position:"",
       job_salary:""
     },
+    checked_ac: false,
     data_th_prefix: ["นาย", "นาง", "นางสาว"],
     data_eng_prefix: ["Mr", "Mrs", "Miss"],
     data_Relationship: ["Father", "Mother", "Grandfather", "Grandmather","Other"],
