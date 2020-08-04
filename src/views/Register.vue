@@ -1,6 +1,7 @@
 <template>
 
   <v-container grid-list-xs>
+    <v-form @submit.prevent="submit">
     <v-card>
 
       <v-toolbar flat color="primary" dark>
@@ -22,7 +23,7 @@
         <v-tab-item value="tab-1">
           <v-card flat>
             <v-card-text>
-              <v-form>
+
                 {{applicant}}
                 <v-row>
 
@@ -245,7 +246,6 @@
                     Next
                   </v-btn>
                 </v-row>
-              </v-form>
             </v-card-text>
           </v-card>
         </v-tab-item>
@@ -447,20 +447,21 @@
                   </v-checkbox>
               </v-row>
               
+              
               <v-row>
                   <v-spacer></v-spacer>
-                  <v-btn class="success mr-3" @click="changeTab(2)">
+                  <v-btn class="success mr-3" type="submit">
                     Submit 
                   </v-btn>
               </v-row>
 
-
-               
+              
             </v-card-text>
           </v-card>
         </v-tab-item>
       </v-tabs>
     </v-card>
+    </v-form>
   </v-container>
 </template>
 
@@ -539,32 +540,24 @@ export default {
           v2
         ) || "Please Check Email",
     ],
-
     th_prefixRules: [(v1) => !!v1 || "Please Select th-prefix"],
     th_first_nameRules: [(v1) => !!v1 || "Please Enter TH First Name"],
     th_last_nameRules: [(v1) => !!v1 || "Please Enter TH Last Name"],
-
     eng_prefixRules: [(v1) => !!v1 || "Please Enter eng-prefix"],
     eng_first_nameRules: [(v1) => !!v1 || "Please Enter  ENG First Name"],
     eng_last_nameRules: [(v1) => !!v1 || "Please Enter ENG Last Name"],
-
     nationality_Rules: [(v1) => !!v1 || "Please Select Your Nationality"],
     phone_numberRules: [(v1) => !!v1 || "Please Enter Phone Number"],
     relationshipRules: [(v1) => !!v1 || "Pleace Select Relationship"],
-
     level_Rules: [(v1) => !!v1 || "Please Select Level"],
     position_Rules: [(v1) => !!v1 || "Please Select Position"],
     salary_Rules: [(v1) => !!v1 || "Please Enter Salary"],
-
-
     addressRules: [(v1) => !!v1 || "Pleace Enter your Address"],
     imageURL: "https://image.flaticon.com/icons/svg/882/882849.svg",
     tab: "tab-1",
     CountryList: ["Thailand"],
     message_filename_pic: "Upload Profile Picture",
     message_filename_resume: " Upload Resume / CV",
-    
-    
   }),
   methods: {
     DateToAge: function(bdate) {
@@ -583,8 +576,7 @@ export default {
       this.applicant.age = "Age : " + person_age;
 
     },
-    onFile_img(event) {
-
+    onFile_img(event){
       const reader = new FileReader();
       reader.onload = (event) => {
         // for preview get img
@@ -615,7 +607,6 @@ export default {
 
     },
     onFile_resume(event) {
-
       const reader = new FileReader();
       //get file size //
       var _size = event.target.files[0].size;
@@ -630,7 +621,8 @@ export default {
       var exactSize = Math.round(_size * 100) / 100 + " " + fSExt[i];
       //console.log("FILE SIZE = ", exactSize);
       //check file type and type file //
-      if (_size < 10485760 && (_file_type == "pdf" || _file_type == "docx")) {
+      if (_size < 10485760 && (_file_type == "pdf" || _file_type == "docx")) 
+      {
         reader.readAsDataURL(event.target.files[0]);
         // for upload
         this.applicant.resumeURL = event.target.files[0];
@@ -642,10 +634,43 @@ export default {
 
     },
     changeTab(tabString) {
-
       this.tab = "tab-" + tabString;
-
     },
+    submit(){
+      console.log(this.applicant)
+
+      let formData = new FormData();
+      const { email, password, th_prefix ,th_firstname,th_lastname,eng_prefix,eng_firstname,
+      eng_lastname,nationality,phone_number,phone_number_famaily,person_relationship,eng_address,
+      date_birthday,age,job_level,job_position,job_salary
+      } = this.applicant;
+
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("th_prefix", th_prefix);
+      formData.append("th_firstname", th_firstname);
+      formData.append("th_lastname", th_lastname);
+      formData.append("eng_prefix", eng_prefix);
+      formData.append("eng_firstname", eng_firstname);
+      formData.append("eng_lastname", eng_lastname);
+      formData.append("nationality", nationality);
+      formData.append("phone_number", phone_number);
+      formData.append("phone_number_famaily", phone_number_famaily);
+      formData.append("person_relationship", person_relationship);
+      formData.append("eng_address", eng_address);
+      formData.append("date_birthday", date_birthday);
+      formData.append("age", age);
+      formData.append("imageURL", this.applicant.imageURL);
+      formData.append("resumeURL", this.applicant.resumeURL);
+      formData.append("job_level", job_level);
+      formData.append("job_position", job_position);
+      formData.append("job_salary", job_salary);
+      // await api.addProduct(formData);
+      // this.$router.back();
+    }
+    // async submit(){
+    //   await api.register(this.account)
+    // }
   },
 };
 </script>
