@@ -1,104 +1,75 @@
 <template>
-  <v-container grid-list-xs>
-    <div id="app">
-      <v-app>
-        <v-toolbar dark color="primary">
-          <v-toolbar-side-icon></v-toolbar-side-icon>
-          <v-toolbar-title class="white--text">{{ title }}</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-btn icon @click="dialog = !dialog">
-            <v-icon>link</v-icon>
-          </v-btn>
-        </v-toolbar>
-        <v-content>
-          <v-container fluid>
-            <v-flex
-              xs12
-              class="text-xs-center text-sm-center text-md-center text-lg-center"
-            >
-              <img :src="imageUrl" height="150" v-if="imageUrl" />
-              <v-text-field
-                label="Select Image"
-                @click="pickFile"
-                v-model="imageName"
-                prepend-icon="attach_file"
-              ></v-text-field>
-              <input
-                type="file"
-                style="display: none"
-                ref="image"
-                accept="image/*"
-                @change="onFilePicked"
-              />
-            </v-flex>
-            <v-dialog v-model="dialog" max-width="290">
-              <v-card>
-                <v-card-title class="headline">Hello World!</v-card-title>
-                <v-card-text
-                  >Image Upload Script in VUE JS
-                  <hr />
-                  Yubaraj Shrestha
-                  <br />http://yubarajshrestha.com.np/</v-card-text
-                >
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    color="green darken-1"
-                    flat="flat"
-                    @click.native="dialog = false"
-                    >Close</v-btn
-                  >
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
+  <v-row justify="center">
+    <v-dialog v-model="dialog" persistent max-width="600px">
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          color="primary"
+          dark
+          v-bind="attrs"
+          v-on="on"
+        >
+          Open Dialog
+        </v-btn>
+      </template>
+      <v-card>
+        <v-card-title>
+          <span class="headline">User Profile</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field label="Legal first name*" required></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field label="Legal middle name" hint="example of helper text only on focus"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field
+                  label="Legal last name*"
+                  hint="example of persistent helper text"
+                  persistent-hint
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field label="Email*" required></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field label="Password*" type="password" required></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-select
+                  :items="['0-17', '18-29', '30-54', '54+']"
+                  label="Age*"
+                  required
+                ></v-select>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-autocomplete
+                  :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
+                  label="Interests"
+                  multiple
+                ></v-autocomplete>
+              </v-col>
+            </v-row>
           </v-container>
-        </v-content>
-      </v-app>
-    </div>
-  </v-container>
+          <small>*indicates required field</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+          <v-btn color="blue darken-1" text @click="dialog = false">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-row>
 </template>
 
 <script>
-import { required, email, minLength, sameAs } from "vuelidate/lib/validators";
-export default {
-  el: "#app",
-  data: () => ({
-    title: "Image Upload",
-    dialog: false,
-    imageName: "",
-    imageUrl: "",
-    imageFile: "",
-    imageSize: "",
-  }),
-
-  methods: {
-    pickFile() {
-      this.$refs.image.click();
-    },
-
-    onFilePicked(e) {
-      alert("show")
-      const files = e.target.files;
-      if (files[0] !== undefined) {
-        this.imageName = files[0].name;
-        alert(imageSize)
-        if (this.imageName.lastIndexOf(".") <= 0) {
-          return;
-        }
-
-        //this.imageName + ":" + this.imageSize;
-        const fr = new FileReader();
-        fr.readAsDataURL(files[0]);
-        fr.addEventListener("load", () => {
-          this.imageUrl = fr.result;
-          this.imageFile = files[0]; // this is an image file that can be sent to server...
-        });
-      } else {
-        this.imageName = "";
-        this.imageFile = "";
-        this.imageUrl = "";
-      }
-    },
-  },
-};
+  export default {
+    data: () => ({
+      dialog: false,
+    }),
+  }
 </script>

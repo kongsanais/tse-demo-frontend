@@ -9,7 +9,7 @@ export const imageUrl = "http://localhost:3000/images";
 
 export const server = {
   LOGIN_URL: `login`,
-  REGISTER_URL: `register`,
+  REGISTER_URL: `users`,
   PRODUCT_URL: `product`,
   TRANSACTION_URL: `transaction`,
   REPORT_URL: `report`,

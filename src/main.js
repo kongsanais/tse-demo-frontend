@@ -17,6 +17,8 @@ new Vue({
   render: h => h(App)
 }).$mount('#app')
 
+
+
 Vue.filter("imageUrl", function(image) {
   return `${imageUrl}/${image}?timestamp=${Date.now()}`;
 });

@@ -1,39 +1,41 @@
 <template>
-
   <v-container grid-list-xs>
-    <v-form @submit.prevent="submit">
-    <v-card>
+    <v-form @submit.prevent="submit" ref="form" v-model="valid" lazy-validation>
+      <v-card>
+        <v-toolbar flat color="primary" dark>
+          <v-toolbar-title>Form Register</v-toolbar-title>
+        </v-toolbar>
 
-      <v-toolbar flat color="primary" dark>
-        <v-toolbar-title>Form Register</v-toolbar-title>
-      </v-toolbar>
+        <v-tabs v-model="tab" vertical>
+          <v-tab
+            class="mr-2 d-none d-sm-flex"
+            v-for="tab in tabs"
+            :key="tab.id"
+            :href="tab.href_tab"
+            exact
+          >
+            <v-icon left>{{ tab.icon }}</v-icon>
+            {{ tab.name }}
+          </v-tab>
 
-      <v-tabs v-model="tab" vertical>
-        <v-tab
-          class="mr-2 d-none d-sm-flex"
-          v-for="tab in tabs"
-          :key="tab.id"
-          :href="tab.href_tab"
-          exact
-        >
-          <v-icon left>{{ tab.icon }}</v-icon>
-          {{ tab.name }}
-        </v-tab>
-
-        <v-tab-item value="tab-1">
-          <v-card flat>
-            <v-card-text>
-
-                {{applicant}}
+          <v-tab-item value="tab-1">
+            <v-card flat>
+              <v-card-text>
+                {{ applicant }}
                 <v-row>
-
                   <!-- E-mail -->
                   <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.email"
                       type="email"
                       label="Email"
-                      :rules="emailRules"
+                      :rules="[
+                        (v1) => !!v1 || 'Email is required',
+                        (v2) =>
+                          !!/^(([^<>()[\]\\.,;:\s@\&quot;]+(\.[^<>()[\]\\.,;:\s@\&quot;]+)*)|(\&quot;.+\&quot;))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+                            v2
+                          ) || 'Please Enter Email',
+                      ]"
                     >
                     </v-text-field>
                   </v-col>
@@ -49,11 +51,15 @@
                       "
                       @click:append="show_password = !show_password"
                       :type="show_password ? 'password' : 'text'"
-                      :rules="passwordRules"
+                      :rules="[
+                        (v1) => !!v1 || 'Password is required',
+                        (v2) =>
+                          !!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(v2) ||
+                          'Minimum eight characters, at least one letter and one number',
+                      ]"
                       required
                     />
                   </v-col>
-
 
                   <!-- Confirm Password -->
                   <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
@@ -69,11 +75,12 @@
                       :rules="[
                         applicant.password === checkpassword ||
                           'Password must match',
+                        (checkpassword) =>
+                          !!checkpassword || 'Pleace Enter your Password',
                       ]"
                       required
                     />
                   </v-col>
-
 
                   <!-- TH prefix  -->
                   <v-col class="d-flex" xl="2" lg="3" md="3" sm="12" cols="12">
@@ -81,7 +88,8 @@
                       :items="data_th_prefix"
                       v-model="applicant.th_prefix"
                       label="คำนำหน้า"
-                      :rules="th_prefixRules"
+                      
+                      
                       outlined
                     >
                     </v-select>
@@ -92,22 +100,20 @@
                     <v-text-field
                       v-model="applicant.th_firstname"
                       label="ชื่อ"
-                      :rules="th_first_nameRules"
+                      :rules="[(v1) => !!v1 || 'Please Enter TH First Name']"
                     >
                     </v-text-field>
                   </v-col>
-
 
                   <!-- TH lastname -->
                   <v-col class="d-flex" xl="5" lg="5" md="3" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.th_lastname"
                       label="นามสกุล"
-                      :rules="th_last_nameRules"
+                      :rules="[(v1) => !!v1 || 'Please Enter TH Last Name']"
                     >
                     </v-text-field>
                   </v-col>
-
 
                   <!-- EN prefix -->
                   <v-col class="d-flex" xl="2" lg="3" md="3" sm="12" cols="12">
@@ -115,7 +121,7 @@
                       label="Prefix"
                       :items="data_eng_prefix"
                       v-model="applicant.eng_prefix"
-                      :rules="eng_prefixRules"
+                      :rules="[(v1) => !!v1 || 'Please Enter eng-prefix']"
                       outlined
                     ></v-select>
                   </v-col>
@@ -125,7 +131,7 @@
                     <v-text-field
                       v-model="applicant.eng_firstname"
                       label="Frist Name"
-                      :rules="eng_first_nameRules"
+                      :rules="[(v1) => !!v1 || 'Please Enter  ENG First Name']"
                     >
                     </v-text-field>
                   </v-col>
@@ -135,7 +141,7 @@
                     <v-text-field
                       v-model="applicant.eng_lastname"
                       label="Last Name"
-                      :rules="eng_last_nameRules"
+                      :rules="[(v1) => !!v1 || 'Please Enter ENG Last Name']"
                     >
                     </v-text-field>
                   </v-col>
@@ -146,7 +152,9 @@
                       v-model="applicant.nationality"
                       :items="CountryList"
                       label="Nationality"
-                      :rules="nationality_Rules"
+                      :rules="[
+                        (v1) => !!v1 || 'Please Select Your Nationality',
+                      ]"
                     ></v-select>
                   </v-col>
 
@@ -157,7 +165,7 @@
                       label="Your Phone Number"
                       type="number"
                       min="0"
-                      :rules="phone_numberRules"
+                      :rules="[(v1) => !!v1 || 'Please Enter Phone Number']"
                     >
                     </v-text-field>
                   </v-col>
@@ -169,7 +177,7 @@
                       label="Phone Number Family"
                       type="number"
                       min="0"
-                      :rules="phone_numberRules"
+                      :rules="[(v1) => !!v1 || 'Please Enter Phone Number']"
                     >
                     </v-text-field>
                   </v-col>
@@ -180,7 +188,7 @@
                       v-model="applicant.person_relationship"
                       :items="data_Relationship"
                       label="Relationship"
-                      :rules="relationshipRules"
+                      :rules="[(v1) => !!v1 || 'Pleace Select Relationship']"
                     ></v-select>
                   </v-col>
 
@@ -193,7 +201,7 @@
                       rows="5"
                       row-height="25"
                       v-model="applicant.eng_address"
-                      :rules="addressRules"
+                      :rules="[(v1) => !!v1 || 'Pleace Enter your Address']"
                       shaped
                     ></v-textarea>
                   </v-col>
@@ -201,7 +209,8 @@
                   <!--  Birthday  -->
                   <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
                     <v-menu
-                      v-model="menu"
+                      ref="date_menu"
+                      v-model="date_menu"
                       :close-on-content-click="false"
                       :nudge-right="40"
                       transition="scale-transition"
@@ -215,29 +224,35 @@
                           readonly
                           v-bind="attrs"
                           v-on="on"
+                          :rules="[
+                            (v1) => !!v1 || 'Pleace Enter your birthday',
+                          ]"
                         >
                         </v-text-field>
                       </template>
 
                       <v-date-picker
                         v-model="applicant.date_birthday"
-                        @input="menu = false"
+                        @input="date_menu = false"
+                        ref="picker"
                         v-on:change="DateToAge(applicant.date_birthday)"
-                      ></v-date-picker>
+                        :max="new Date().toISOString().substr(0, 10)"
+                        min="1950-01-01"
+                      >
+                      </v-date-picker>
                     </v-menu>
                   </v-col>
 
                   <!-- Age -->
-                  <v-col class="d-flex" xl="1" lg="1" md="1" sm="1" cols="12">
+                  <!-- <v-col class="d-flex" xl="1" lg="1" md="1" sm="1" cols="12">
                     <v-text-field
                       v-model="applicant.age"
                       label="Age"
-                      disabled
+                      readonly
                       sm
-                      solo
                     >
                     </v-text-field>
-                  </v-col>
+                  </v-col> -->
                 </v-row>
 
                 <v-row>
@@ -246,230 +261,253 @@
                     Next
                   </v-btn>
                 </v-row>
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
 
-        <v-tab-item value="tab-2">
-          <v-card flat>
-            <v-card-text>
-              <v-row>
-                <!-- Review imgage -->
-                <v-col class="d-flex" xl="2" lg="4" md="4" sm="12" cols="12">
-                  <img
-                    v-if="imageURL"
-                    :src="imageURL"
-                    style="width=height:150px;width:220px;border-style: groove;"
-                  />
-                </v-col>
+          <v-tab-item value="tab-2">
+            <v-card flat>
+              <v-card-text>
+                <v-row>
+                  <!-- Review imgage -->
+                  <v-col class="d-flex" xl="2" lg="4" md="4" sm="12" cols="12">
+                    <img
+                      v-if="imageURL"
+                      :src="imageURL"
+                      style="width=height:150px;width:220px;border-style: groove;"
+                      
+                    />
+                  </v-col>
 
-                <!-- upload img file input and resume -->
-                <v-col class="d-flex" xl="5" lg="4" md="6" sm="12" cols="12">
-                  <v-card  outlined>
-                    <v-list-item>
-                      <v-list-item-content>
-                        <v-list-item-title class="headline mb-6"
-                          >Upload</v-list-item-title
-                        >
-                        <v-list-item-subtitle>
-                          <!--btn upload profile picture-->
-                          <v-btn
-                            class="mt-1 mr-2"
-                            color="#"
-                            @click="$refs.inputUpload_img.click()"
-                            v-model="message_filename_pic"
+                  <!-- upload img file input and resume -->
+                  <v-col class="d-flex" xl="5" lg="4" md="6" sm="12" cols="12">
+                    <v-card outlined>
+                      <v-list-item>
+                        <v-list-item-content>
+                          <v-list-item-title class="headline mb-6"
+                            >Upload</v-list-item-title
                           >
-                            <!-- i-con in btn -->
-                            <v-icon class="mr-2">mdi-cloud-upload</v-icon>
-                            {{ message_filename_pic }}
-                          </v-btn>
+                          <v-list-item-subtitle>
+                            <!--btn upload profile picture-->
+                            <v-btn
+                              class="mt-1 mr-2"
+                              color="#"
+                              @click="$refs.inputUpload_img.click()"
+                              v-model="message_filename_pic"
+                            >
+                              <!-- i-con in btn -->
+                              <v-icon class="mr-2">mdi-cloud-upload</v-icon>
+                              {{ message_filename_pic }}
+                            </v-btn>
 
-                          <!-- i-con check  if -->
-                          <v-icon
-                            v-if="applicant.imageURL == null"
-                            color="warning"
-                            class="mdi mdi-36px"
-                          >
-                            mdi-alert-circle-outline</v-icon
-                          >
+                            <!-- i-con check  if -->
+                            <v-icon
+                              v-if="applicant.imageURL == null"
+                              color="warning"
+                              class="mdi mdi-36px"
+                            >
+                              mdi-alert-circle-outline</v-icon
+                            >
 
-                          <v-icon v-else color="success" class="mdi mdi-36px"
-                            >mdi-check-circle-outline</v-icon
-                          >
+                            <v-icon v-else color="success" class="mdi mdi-36px"
+                              >mdi-check-circle-outline</v-icon
+                            >
 
-                          <!-- input file for upload  -->
-                          <input
-                            type="file"
-                            style="display: none"
-                            ref="inputUpload_img"
-                            @change="onFile_img"
-                          />
+                            <!-- input file for upload  -->
+                            <input
+                              type="file"
+                              style="display: none"
+                              ref="inputUpload_img"
+                              @change="onFile_img"
+                              :rules="[(v1) => !!v1 || 'Please Upload Picture']"
+                            />
 
-                          <br />
+                            <br />
 
-                          <!-- btn upload resume/cv -->
-                          <v-btn
-                            class="mt-3 mr-1"
-                            depressed
-                            color="#"
-                            @click="$refs.inputUpload_resume.click()"
-                            v-model="message_filename_resume"
-                          >
-                            <!-- i-con in btn -->
-                            <v-icon class="mr-2">mdi-cloud-upload</v-icon>
-                            {{ message_filename_resume }}
-                          </v-btn>
+                            <!-- btn upload resume/cv -->
+                            <v-btn
+                              class="mt-3 mr-1"
+                              depressed
+                              color="#"
+                              @click="$refs.inputUpload_resume.click()"
+                              v-model="message_filename_resume"
+                            >
+                              <!-- i-con in btn -->
+                              <v-icon class="mr-2">mdi-cloud-upload</v-icon>
+                              {{ message_filename_resume }}
+                            </v-btn>
 
-                          <!-- i-con check  if -->
-                          <v-icon
-                            v-if="applicant.resumeURL == null"
-                            color="warning"
-                            class="mdi mdi-36px mt-3"
-                            >mdi-alert-circle-outline</v-icon
-                          >
-                          <v-icon v-else color="success" class="mdi mdi-36px"
-                            >mdi-check-circle-outline</v-icon
-                          >
+                            <!-- i-con check  if -->
+                            <v-icon
+                              v-if="applicant.resumeURL == null"
+                              color="warning"
+                              class="mdi mdi-36px mt-3"
+                              >mdi-alert-circle-outline</v-icon
+                            >
+                            <v-icon v-else color="success" class="mdi mdi-36px"
+                              >mdi-check-circle-outline</v-icon
+                            >
 
-                          <!-- input file for upload  -->
-                          <input
-                            type="file"
-                            style="display: none"
-                            ref="inputUpload_resume"
-                            @change="onFile_resume"
-                          />
-                        </v-list-item-subtitle>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-card>
-                </v-col>
-              </v-row>
-
+                            <!-- input file for upload  -->
+                            <input
+                              type="file"
+                              style="display: none"
+                              ref="inputUpload_resume"
+                              @change="onFile_resume"
+                              :rules="[(v1) => !!v1 || 'Please Upload Resume / CV']"
+                            />
+                          </v-list-item-subtitle>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-card>
+                  </v-col>
+                </v-row>
 
                 <v-row>
                   <!-- Level -->
                   <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
-                          <v-select
-                            v-model="applicant.job_level"
-                            :items="data_level"
-                            label="Level"
-                            :rules="level_Rules"
-                          >
-                          </v-select>
+                    <v-select
+                      v-model="applicant.job_level"
+                      :items="data_level"
+                      label="Level"
+                      :rules="[(v1) => !!v1 || 'Please Select Level']"
+                    >
+                    </v-select>
                   </v-col>
                 </v-row>
-
-
 
                 <v-row>
                   <!-- Position -->
                   <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
-                          <v-select
-                            v-model="applicant.job_position"
-                            :items="data_position"
-                            label="Position"
-                            :rules="position_Rules"
-                          >
-                          </v-select>
+                    <v-select
+                      v-model="applicant.job_position"
+                      :items="data_position"
+                      label="Position"
+                      :rules="[(v1) => !!v1 || 'Please Select Position']"
+                    >
+                    </v-select>
                   </v-col>
                 </v-row>
 
-                  
-                  <v-row>
+                <v-row>
                   <!-- Salary -->
                   <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
                     <v-text-field
-                    v-model="applicant.job_salary"
+                      v-model="applicant.job_salary"
                       label="Salary"
                       type="number"
-                      min=0
-                      :rules="salary_Rules"
+                      min="0"
+                      :rules="[(v1) => !!v1 || 'Please Enter Salary']"
                     >
                     </v-text-field>
                   </v-col>
                 </v-row>
+                <v-row>
+                  <v-spacer></v-spacer>
+                  <v-btn @click="changeTab(1)" class="mr-3">
+                    Back
+                  </v-btn>
 
+                  <v-btn @click="changeTab(3)" class="primary">
+                    Next
+                  </v-btn>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
 
+          <v-tab-item value="tab-3">
+            <v-card flat>
+              <v-card-text>
+                <h2 class="mt-2 mb-3">
+                  Privacy policy/นโยบายความเป็นส่วนตัว
+                </h2>
 
+                <p class="mb-0">
+                  นโยบายความเป็นส่วนตัวฉบับนี้มีผลบังคับใช้กับอุปกรณ์และบริการทั้งหมดของ
+                  Samsung ตั้งแต่โทรศัพท์มือถือและแท็บเล็ต ไปจนถึงโทรทัศน์
+                  เครื่องใช้ในบ้าน บริการออนไลน์ เว็บไซต์ แอปพลิเคชัน บริการ
+                  การประกวดแข่งขัน การสำรวจ การแลกรับสิทธิ์ การทำการตลาด
+                  การส่งเสริมการขาย การลงทะเบียนรับประกันสินค้า
+                  บริการหลังการขายหรือบริการซ่อม และบริการอื่นของ Samsung
+                  ที่อ้างถึงหรือเชื่อมโยงถึงนโยบายนี้ (เรียกรวมกันว่า “บริการ”
+                  ของเรา) นอกจากนั้น
+                  คุณจะต้องหมั่นตรวจสอบการปรับปรุงนโยบายความเป็นส่วนตัวฉบับนี้อย่างสม่ำเสมอ
+                  นโยบายความเป็นส่วนตัวฉบับนี้อาจถูกปรับปรุงเป็นระยะๆเพื่อให้สอดคล้องกับการเปลี่ยนแปลงของแนวปฏิบัติด้านข้อมูลส่วนบุคคลซึ่งเกี่ยวกับบริการ
+                  หรือการเปลี่ยนแปลงของกฎหมายที่เกี่ยวข้อง
+                  เราจะประกาศในเว็บไซต์ของเราหรือในอุปกรณ์ของคุณเพื่อแจ้งล่วงหน้าเกี่ยวกับการเปลี่ยนแปลงที่สำคัญในนโยบายความเป็นส่วนตัว
+                  และจะระบุวันที่อัปเดตครั้งล่าสุดไว้ที่ด้านบน
+                  คุณจะสามารถดูเวอร์ชันที่เป็นปัจจุบันที่สุดของนโยบายความเป็นส่วนตัวได้ที่นี่เสมอ:
+                  https://account.samsung.com/membership/pp
+                </p>
 
-
-
-              <v-row>
-                <v-spacer></v-spacer>
-                <v-btn @click="changeTab(1)" class="mr-3">
-                  Back
-                </v-btn>
-
-                <v-btn @click="changeTab(3)" class="primary">
-                  Next
-                </v-btn>
-              </v-row>
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-
-        <v-tab-item value="tab-3">
-          <v-card flat>
-            <v-card-text>
-              <h2 class="mt-2 mb-3">
-                Privacy policy/นโยบายความเป็นส่วนตัว
-              </h2>
-
-              <p class="mb-0">
-                นโยบายความเป็นส่วนตัวฉบับนี้มีผลบังคับใช้กับอุปกรณ์และบริการทั้งหมดของ
-                Samsung ตั้งแต่โทรศัพท์มือถือและแท็บเล็ต ไปจนถึงโทรทัศน์
-                เครื่องใช้ในบ้าน บริการออนไลน์ เว็บไซต์ แอปพลิเคชัน บริการ
-                การประกวดแข่งขัน การสำรวจ การแลกรับสิทธิ์ การทำการตลาด
-                การส่งเสริมการขาย การลงทะเบียนรับประกันสินค้า
-                บริการหลังการขายหรือบริการซ่อม และบริการอื่นของ Samsung
-                ที่อ้างถึงหรือเชื่อมโยงถึงนโยบายนี้ (เรียกรวมกันว่า “บริการ”
-                ของเรา) นอกจากนั้น
-                คุณจะต้องหมั่นตรวจสอบการปรับปรุงนโยบายความเป็นส่วนตัวฉบับนี้อย่างสม่ำเสมอ
-                นโยบายความเป็นส่วนตัวฉบับนี้อาจถูกปรับปรุงเป็นระยะๆเพื่อให้สอดคล้องกับการเปลี่ยนแปลงของแนวปฏิบัติด้านข้อมูลส่วนบุคคลซึ่งเกี่ยวกับบริการ
-                หรือการเปลี่ยนแปลงของกฎหมายที่เกี่ยวข้อง
-                เราจะประกาศในเว็บไซต์ของเราหรือในอุปกรณ์ของคุณเพื่อแจ้งล่วงหน้าเกี่ยวกับการเปลี่ยนแปลงที่สำคัญในนโยบายความเป็นส่วนตัว
-                และจะระบุวันที่อัปเดตครั้งล่าสุดไว้ที่ด้านบน
-                คุณจะสามารถดูเวอร์ชันที่เป็นปัจจุบันที่สุดของนโยบายความเป็นส่วนตัวได้ที่นี่เสมอ:
-                https://account.samsung.com/membership/pp
-              </p>
-
-              <!-- <input type="checkbox" id="checkbox" v-model="checked">
-              <label for="checkbox">{{ checked }}</label> -->
-              <v-row>
+                <!-- accept -->
+                <v-row>
                   <v-checkbox
                     v-model="checked_ac"
                     class="ml-2"
                     label="Accept"
                     type="checkbox"
                     small
-                    required
+                    :rules="[(v1) => !!v1 || 'Pleace Accept Privacy Policy']"
                   >
                   </v-checkbox>
-              </v-row>
-              
-              
-              <v-row>
-                  <v-spacer></v-spacer>
-                  <v-btn class="success mr-3" type="submit">
-                    Submit 
-                  </v-btn>
-              </v-row>
+                </v-row>
 
-              
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-      </v-tabs>
-    </v-card>
+                <!-- submit -->
+                <v-row>
+                  <v-spacer></v-spacer>
+
+                  <v-btn @click="changeTab(2)" class="mr-3">
+                    Back
+                  </v-btn>
+
+                  <v-btn
+                    class="success mr-3"
+                    type="submit"
+                    @click.stop="dialog = true"
+                  >
+                    Submit
+                  </v-btn>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+        </v-tabs>
+      </v-card>
     </v-form>
+
+    <v-dialog v-model="dialog" max-width="290">
+      <v-card>
+        <v-card-title class="headline"
+          >Use Google's location service?</v-card-title
+        >
+
+        <v-card-text>
+          Let Google help apps determine location. This means sending anonymous
+          location data to Google, even when no apps are running.
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn color="green darken-1" text @click="dialog = false">
+            Disagree
+          </v-btn>
+
+          <v-btn color="green darken-1" text @click="dialog = false">
+            Agree
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
-import { required, email, minLength, sameAs } from "vuelidate/lib/validators";
+import api from "@/services/api";
 export default {
   data: () => ({
-    date: new Date().toISOString().substr(0, 10),
     applicant: {
       email: "",
       password: "",
@@ -479,27 +517,41 @@ export default {
       eng_prefix: "",
       eng_firstname: "",
       eng_lastname: "",
-      nationality:"",
-      phone_number:"",
-      phone_number_famaily:"",
-      person_relationship:"",
+      nationality: "",
+      phone_number: "",
+      phone_number_famaily: "",
+      person_relationship: "",
       eng_address: "",
-      date_birthday: new Date().toISOString().substr(0, 10),
+      date_birthday: null,
       age: "",
       imageURL: null,
       resumeURL: null,
-      job_level:"",
-      job_position:"",
-      job_salary:""
+      job_level: null,
+      job_position: "",
+      job_salary: "",
     },
     checked_ac: false,
     data_th_prefix: ["นาย", "นาง", "นางสาว"],
     data_eng_prefix: ["Mr", "Mrs", "Miss"],
-    data_Relationship: ["Father", "Mother", "Grandfather", "Grandmather","Other"],
+    data_Relationship: [
+      "Father",
+      "Mother",
+      "Grandfather",
+      "Grandmather",
+      "Other",
+    ],
+    data_level: ["Office/Engineer", "Management"],
+    data_position: ["Developer", "Data Analysis"],
+    show_password: true,
+    show_password_con: true,
+    valid: true,
     checkpassword: "",
-    data_level :['Office/Engineer','Management'],
-    data_position: ['Developer','Data Analysis'],
-    menu: false,
+    date_menu: false, //for date
+    imageURL: "https://image.flaticon.com/icons/svg/882/882849.svg",
+    CountryList: ["Thailand"],
+    message_filename_pic: "Upload Profile Picture",
+    message_filename_resume: " Upload Resume / CV",
+    tab: "tab-1",
     tabs: [
       {
         id: 1,
@@ -520,48 +572,10 @@ export default {
         href_tab: "#tab-3",
       },
     ],
-    show_password: true,
-    show_password_con: true,
-    usernameRules: [
-      (v1) => !!v1 || "Username is required",
-      (v2) =>
-        !!/^[a-zA-Z]{8,}$/.test(v2) || "Name must have at least 8 letters.",
-    ],
-    passwordRules: [
-      (v1) => !!v1 || "Password is required",
-      (v2) =>
-        !!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(v2) ||
-        "Minimum eight characters, at least one letter and one number",
-    ],
-    emailRules: [
-      (v1) => !!v1 || "Email is required",
-      (v2) =>
-        !!/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-          v2
-        ) || "Please Check Email",
-    ],
-    th_prefixRules: [(v1) => !!v1 || "Please Select th-prefix"],
-    th_first_nameRules: [(v1) => !!v1 || "Please Enter TH First Name"],
-    th_last_nameRules: [(v1) => !!v1 || "Please Enter TH Last Name"],
-    eng_prefixRules: [(v1) => !!v1 || "Please Enter eng-prefix"],
-    eng_first_nameRules: [(v1) => !!v1 || "Please Enter  ENG First Name"],
-    eng_last_nameRules: [(v1) => !!v1 || "Please Enter ENG Last Name"],
-    nationality_Rules: [(v1) => !!v1 || "Please Select Your Nationality"],
-    phone_numberRules: [(v1) => !!v1 || "Please Enter Phone Number"],
-    relationshipRules: [(v1) => !!v1 || "Pleace Select Relationship"],
-    level_Rules: [(v1) => !!v1 || "Please Select Level"],
-    position_Rules: [(v1) => !!v1 || "Please Select Position"],
-    salary_Rules: [(v1) => !!v1 || "Please Enter Salary"],
-    addressRules: [(v1) => !!v1 || "Pleace Enter your Address"],
-    imageURL: "https://image.flaticon.com/icons/svg/882/882849.svg",
-    tab: "tab-1",
-    CountryList: ["Thailand"],
-    message_filename_pic: "Upload Profile Picture",
-    message_filename_resume: " Upload Resume / CV",
+    dialog: false,
   }),
   methods: {
     DateToAge: function(bdate) {
-
       var today = new Date();
       var birthDate = new Date(bdate);
       var person_age = today.getFullYear() - birthDate.getFullYear();
@@ -573,10 +587,9 @@ export default {
       if (person_age == 0 || person_age < 0) {
         person_age = 0;
       }
-      this.applicant.age = "Age : " + person_age;
-
+      this.applicant.age = person_age;
     },
-    onFile_img(event){
+    onFile_img(event) {
       const reader = new FileReader();
       reader.onload = (event) => {
         // for preview get img
@@ -604,7 +617,6 @@ export default {
         alert("Pls Check File Size or File Type");
         this.applicant.imageURL = null;
       }
-
     },
     onFile_resume(event) {
       const reader = new FileReader();
@@ -621,8 +633,7 @@ export default {
       var exactSize = Math.round(_size * 100) / 100 + " " + fSExt[i];
       //console.log("FILE SIZE = ", exactSize);
       //check file type and type file //
-      if (_size < 10485760 && (_file_type == "pdf" || _file_type == "docx")) 
-      {
+      if (_size < 10485760 && (_file_type == "pdf" || _file_type == "docx")) {
         reader.readAsDataURL(event.target.files[0]);
         // for upload
         this.applicant.resumeURL = event.target.files[0];
@@ -631,46 +642,81 @@ export default {
         alert("Pls Check File Size or File Type");
         this.applicant.resumeURL = null;
       }
-
     },
     changeTab(tabString) {
       this.tab = "tab-" + tabString;
     },
-    submit(){
-      console.log(this.applicant)
+    async submit() {
+      var check = this.$refs.form.validate();
+      
+      if(this.applicant.imageURL == null){
+          check = false
+      }else{
+          check = true
+      }
+      
+      if(this.applicant.resumeURL == null){
+          check = false     
+      }else{
+          check = true 
+      }
 
-      let formData = new FormData();
-      const { email, password, th_prefix ,th_firstname,th_lastname,eng_prefix,eng_firstname,
-      eng_lastname,nationality,phone_number,phone_number_famaily,person_relationship,eng_address,
-      date_birthday,age,job_level,job_position,job_salary
-      } = this.applicant;
+      if (check == true) 
+      {
+        let formData = new FormData();
+        const {
+          email,
+          password,
+          th_prefix,
+          th_firstname,
+          th_lastname,
+          eng_prefix,
+          eng_firstname,
+          eng_lastname,
+          nationality,
+          phone_number,
+          phone_number_famaily,
+          person_relationship,
+          eng_address,
+          date_birthday,
+          age,
+          job_level,
+          job_position,
+          job_salary,
+        } = this.applicant;
 
-      formData.append("email", email);
-      formData.append("password", password);
-      formData.append("th_prefix", th_prefix);
-      formData.append("th_firstname", th_firstname);
-      formData.append("th_lastname", th_lastname);
-      formData.append("eng_prefix", eng_prefix);
-      formData.append("eng_firstname", eng_firstname);
-      formData.append("eng_lastname", eng_lastname);
-      formData.append("nationality", nationality);
-      formData.append("phone_number", phone_number);
-      formData.append("phone_number_famaily", phone_number_famaily);
-      formData.append("person_relationship", person_relationship);
-      formData.append("eng_address", eng_address);
-      formData.append("date_birthday", date_birthday);
-      formData.append("age", age);
-      formData.append("imageURL", this.applicant.imageURL);
-      formData.append("resumeURL", this.applicant.resumeURL);
-      formData.append("job_level", job_level);
-      formData.append("job_position", job_position);
-      formData.append("job_salary", job_salary);
-      // await api.addProduct(formData);
-      // this.$router.back();
-    }
-    // async submit(){
-    //   await api.register(this.account)
-    // }
+        formData.append("email", email);
+        formData.append("password", password);
+        formData.append("th_prefix", th_prefix);
+        formData.append("th_firstname", th_firstname);
+        formData.append("th_lastname", th_lastname);
+        formData.append("eng_prefix", eng_prefix);
+        formData.append("eng_firstname", eng_firstname);
+        formData.append("eng_lastname", eng_lastname);
+        formData.append("nationality", nationality);
+        formData.append("phone_number", phone_number);
+        formData.append("phone_number_famaily", phone_number_famaily);
+        formData.append("person_relationship", person_relationship);
+        formData.append("eng_address", eng_address);
+        formData.append("date_birthday", date_birthday);
+        formData.append("age", age);
+        formData.append("imageURL", this.applicant.imageURL);
+        formData.append("resumeURL", this.applicant.resumeURL);
+        formData.append("job_level", job_level);
+        formData.append("job_position", job_position);
+        formData.append("job_salary", job_salary);
+        //await api.register(formData);
+
+      } else {
+        alert("check your form");
+      }
+      
+    },
+  },
+  watch: {
+    date_menu(val) {
+      val && setTimeout(() => (this.$refs.picker.activePicker = "YEAR"));
+    },
   },
 };
 </script>
