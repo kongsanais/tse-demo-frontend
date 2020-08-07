@@ -2,12 +2,12 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const { email } = require('vuelidate/lib/validators')
 
 const userSchema = new mongoose.Schema({
     email: {
         type: String,
         unique: true,
-        required: true,
         trim: true,
         lowercase: true,
         validate(value) {
@@ -33,13 +33,11 @@ const userSchema = new mongoose.Schema({
     },
     th_firstname: {
         type: String,
-        trim:true,
-        minlength: 4
+        trim:true
     },
     th_lastname: {
         type: String,
-        trim:true,
-        minlength: 4
+        trim:true
     },
     eng_prefix: {
         type: String,
@@ -47,13 +45,11 @@ const userSchema = new mongoose.Schema({
     },
     eng_firstname: {
         type: String,
-        trim:true,
-        minlength: 4
+        trim:true
     },
     eng_lastname: {
         type: String,
-        trim:true,
-        minlength: 4
+        trim:true
     },
     nationality: {
         type: String,
@@ -149,7 +145,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
 // Hash the plain text password before saving
 userSchema.pre('save', async function (next) {
     const user = this
-
+    
     if (user.isModified('password')) {
         user.password = await bcrypt.hash(user.password, 8)
     }

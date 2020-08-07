@@ -12,7 +12,6 @@ uploadImage = async (files, doc) => {
     doc.imageURL = `${doc._id}.${fileExtention}`;
     var newpath =
       path.resolve("./uploaded/images/") + "/" + doc.imageURL;
-      
 
     if (fs.exists(newpath)) {
       await fs.remove(newpath);
@@ -25,6 +24,7 @@ uploadImage = async (files, doc) => {
   }
 };
 
+
 uploadResume = async (files, doc) => {
   if (files.resumeURL != null) {
     var fileExtention = files.resumeURL.name.split(".")[1];
@@ -32,10 +32,10 @@ uploadResume = async (files, doc) => {
     var newpath =
       path.resolve("./uploaded/resume/") + "/" + doc.resumeURL;
 
-
     if (fs.exists(newpath)) {
       await fs.remove(newpath);
     }
+
     await fs.moveSync(files.resumeURL.path, newpath);
 
     // Update database
@@ -49,20 +49,33 @@ uploadResume = async (files, doc) => {
 router.post('/users', (req, res) => {
     try{
       const form = new formaidable.IncomingForm()
-      form.parse(req, async (error,fields,files)=>
-      {
+      form.parse(req, async (error,fields,files) =>
+      {   
           const user  = new User(fields)
-          let result = await user.save();
-          await uploadImage(files,result)
-          await uploadResume(files,result)
-          // const token = await user.generateAuthToken()
-          res.json({result: "ok" , message: JSON.stringify(result)})
+          const user_file  = files ; 
+
+          User.find({email : user.email}, async function (err, docs) 
+          {
+
+            if (docs.length == 1) {
+                 res.json({ result: false, message: JSON.stringify(error) });
+            }else{                
+                  let result =  await user.save();
+                  await  uploadImage(user_file,result)
+                  await  uploadResume(user_file,result)
+                  //const token = await user.generateAuthToken()
+                  res.json({result: true , message: JSON.stringify(result)})
+            }
+
+          });
       }
-      )
+    )
     }catch(error){
-       res.json({ result: "notok", message: JSON.stringify(error) });
+       res.json({ result: false, message: JSON.stringify(error) });
     }
 })
+
+
 
 
   
@@ -94,7 +107,6 @@ router.post('/users/logout', auth, async (req, res) => {
 router.get('/users/profile', auth, async (req, res) => {
     res.send(req.user)
 })
-
 
 
 // router.post('/users/logoutAll', auth, async (req, res) => {

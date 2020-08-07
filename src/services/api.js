@@ -25,16 +25,20 @@ import router from "@/router";
 //   }
 // };
 
+
 const register = async values => {
   let result = await httpClient.post(server.REGISTER_URL, values);
-  if (result.data.result == "ok") 
-  {
-    // router.go(-1);
-    alert("register complete")
-  } else {
-    alert("check your form data");
-  }
+  return result.data.result;
+  // if (result.data.result == "notok") 
+  // {
+  //   alert("same")
+  // } else {
+  //   alert("ok");
+  // }
+
+
 };
+
 
 
 

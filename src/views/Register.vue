@@ -8,7 +8,7 @@
 
         <v-tabs v-model="tab" vertical>
           <v-tab
-            class="mr-2 d-none d-sm-flex"
+            class="mr-2 d-none d-sm-flex disabledTab"
             v-for="tab in tabs"
             :key="tab.id"
             :href="tab.href_tab"
@@ -88,8 +88,7 @@
                       :items="data_th_prefix"
                       v-model="applicant.th_prefix"
                       label="คำนำหน้า"
-                      
-                      
+                      :rules="[(v1) => !!v1 || 'Please Select TH First Name']"
                       outlined
                     >
                     </v-select>
@@ -275,7 +274,6 @@
                       v-if="imageURL"
                       :src="imageURL"
                       style="width=height:150px;width:220px;border-style: groove;"
-                      
                     />
                   </v-col>
 
@@ -306,8 +304,8 @@
                               color="warning"
                               class="mdi mdi-36px"
                             >
-                              mdi-alert-circle-outline</v-icon
-                            >
+                              mdi-alert-circle-outline
+                            </v-icon>
 
                             <v-icon v-else color="success" class="mdi mdi-36px"
                               >mdi-check-circle-outline</v-icon
@@ -354,7 +352,9 @@
                               style="display: none"
                               ref="inputUpload_resume"
                               @change="onFile_resume"
-                              :rules="[(v1) => !!v1 || 'Please Upload Resume / CV']"
+                              :rules="[
+                                (v1) => !!v1 || 'Please Upload Resume / CV',
+                              ]"
                             />
                           </v-list-item-subtitle>
                         </v-list-item-content>
@@ -465,7 +465,7 @@
                   <v-btn
                     class="success mr-3"
                     type="submit"
-                    @click.stop="dialog = true"
+                    @click.stop="dialog_messenger.status = true"
                   >
                     Submit
                   </v-btn>
@@ -477,25 +477,39 @@
       </v-card>
     </v-form>
 
-    <v-dialog v-model="dialog" max-width="290">
+    <v-dialog v-model="dialog_messenger.status" max-width="480">
       <v-card>
-        <v-card-title class="headline"
-          >Use Google's location service?</v-card-title
-        >
+        <v-card-title class="headline grey lighten-2">
+          {{ dialog_messenger.title }}
+          <v-icon color="warning" class="mdi mdi-36px ml-2">
+            mdi-alert-circle-outline
+          </v-icon>
+        </v-card-title>
 
-        <v-card-text>
-          Let Google help apps determine location. This means sending anonymous
-          location data to Google, even when no apps are running.
+        <v-card-text class="mt-3 pd-0">
+          <h2 class="mb-3">{{ dialog_messenger.text }}</h2>
+          <h3>
+            <p><span v-html="dialog_messenger.sub_text"></span></p>
+          </h3>
         </v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn color="green darken-1" text @click="dialog = false">
+          <!-- <v-btn
+            color="green darken-1"
+            text
+            @click="dialog_messenger.status = false"
+          >
             Disagree
-          </v-btn>
+          </v-btn> -->
 
-          <v-btn color="green darken-1" text @click="dialog = false">
+          <v-btn
+            class="primary"
+            light
+            text
+            @click="dialog_messenger.status = false"
+          >
             Agree
           </v-btn>
         </v-card-actions>
@@ -572,7 +586,12 @@ export default {
         href_tab: "#tab-3",
       },
     ],
-    dialog: false,
+    dialog_messenger: {
+      status: false,
+      title: "Message",
+      text: "",
+      sub_text: "",
+    },
   }),
   methods: {
     DateToAge: function(bdate) {
@@ -608,13 +627,21 @@ export default {
       var exactSize = Math.round(_size * 100) / 100 + " " + fSExt[i];
       //console.log("FILE SIZE = ", exactSize);
       //check file type and type file //
-      if (_size < 10485760 && (_file_type == "png" || _file_type == "jpg")) {
+      //10mb
+      if (
+        _size < 10485760 &&
+        (_file_type == "png" || _file_type == "jpg" || _file_type == "jpeg")
+      ) {
         reader.readAsDataURL(event.target.files[0]);
         // for upload
         this.applicant.imageURL = event.target.files[0];
         this.message_filename_pic = _name + "(" + exactSize + ")";
       } else {
-        alert("Pls Check File Size or File Type");
+        this.dialog_messenger.text = "Please Check Image Size and File Type";
+        this.dialog_messenger.sub_text =
+          "- Image Size < 10 mb <br> - Image Should be .PNG  .JPG   .JPEG ";
+        this.dialog_messenger.status = true;
+
         this.applicant.imageURL = null;
       }
     },
@@ -633,13 +660,19 @@ export default {
       var exactSize = Math.round(_size * 100) / 100 + " " + fSExt[i];
       //console.log("FILE SIZE = ", exactSize);
       //check file type and type file //
-      if (_size < 10485760 && (_file_type == "pdf" || _file_type == "docx")) {
+      if (
+        _size < 10485760 &&
+        (_file_type == "pdf" || _file_type == "docx" || _file_type == "doc")
+      ) {
         reader.readAsDataURL(event.target.files[0]);
         // for upload
         this.applicant.resumeURL = event.target.files[0];
         this.message_filename_resume = _name + "(" + exactSize + ")";
       } else {
-        alert("Pls Check File Size or File Type");
+        this.dialog_messenger.text = "Please Check Resume Size and File Type";
+        this.dialog_messenger.sub_text =
+          "- Resume Size < 10 mb <br> - Resume/CV Should be .PDF  .DOC   .DOCX ";
+        this.dialog_messenger.status = true;
         this.applicant.resumeURL = null;
       }
     },
@@ -648,69 +681,34 @@ export default {
     },
     async submit() {
       var check = this.$refs.form.validate();
-      
-      if(this.applicant.imageURL == null){
-          check = false
-      }else{
-          check = true
-      }
-      
-      if(this.applicant.resumeURL == null){
-          check = false     
-      }else{
-          check = true 
-      }
 
-      if (check == true) 
-      {
-        let formData = new FormData();
-        const {
-          email,
-          password,
-          th_prefix,
-          th_firstname,
-          th_lastname,
-          eng_prefix,
-          eng_firstname,
-          eng_lastname,
-          nationality,
-          phone_number,
-          phone_number_famaily,
-          person_relationship,
-          eng_address,
-          date_birthday,
-          age,
-          job_level,
-          job_position,
-          job_salary,
-        } = this.applicant;
-
-        formData.append("email", email);
-        formData.append("password", password);
-        formData.append("th_prefix", th_prefix);
-        formData.append("th_firstname", th_firstname);
-        formData.append("th_lastname", th_lastname);
-        formData.append("eng_prefix", eng_prefix);
-        formData.append("eng_firstname", eng_firstname);
-        formData.append("eng_lastname", eng_lastname);
-        formData.append("nationality", nationality);
-        formData.append("phone_number", phone_number);
-        formData.append("phone_number_famaily", phone_number_famaily);
-        formData.append("person_relationship", person_relationship);
-        formData.append("eng_address", eng_address);
-        formData.append("date_birthday", date_birthday);
-        formData.append("age", age);
-        formData.append("imageURL", this.applicant.imageURL);
-        formData.append("resumeURL", this.applicant.resumeURL);
-        formData.append("job_level", job_level);
-        formData.append("job_position", job_position);
-        formData.append("job_salary", job_salary);
-        //await api.register(formData);
-
+      if (this.applicant.imageURL == null || this.applicant.resumeURL == null) {
+        check = false;
       } else {
-        alert("check your form");
+        check = true;
       }
-      
+
+      if (check == true) {
+        let formData = new FormData();
+        Object.keys(this.applicant).forEach((key) =>
+          formData.append(key, this.applicant[key])
+        );
+        const check_api_email = await api.register(formData);
+
+        if (check_api_email) {
+          this.dialog_messenger.text = "Complete";
+          this.dialog_messenger.sub_text = "";
+          this.dialog_messenger.status = true;
+        } else {
+          this.dialog_messenger.text = "Email Same";
+          this.dialog_messenger.sub_text = "";
+          this.dialog_messenger.status = true;
+        }
+      } else {
+        this.dialog_messenger.text = "Please Check Your Information";
+        this.dialog_messenger.sub_text = "";
+        this.dialog_messenger.status = true;
+      }
     },
   },
   watch: {
@@ -720,3 +718,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.disabledTab {
+  pointer-events: none;
+}
+</style>
