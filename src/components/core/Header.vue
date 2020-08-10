@@ -14,13 +14,15 @@
       ></v-img>
       <v-spacer></v-spacer>
 
-
-      <div v-for="([title, route], index) in top_right_menu" :key="index" >
-       <v-btn  class="mr-2 d-none d-sm-flex" @click="onClickMenu(route)">
-       {{title}}
-      </v-btn>
+      <div v-for="([title, route], index) in top_right_menu" :key="index">
+        <v-btn class="mr-2 d-none d-sm-flex" @click="onClickMenu(route)">
+          {{ title }}
+        </v-btn>
       </div>
-
+      <span>{{ $store.getters["username"]  | capitalize }}</span>
+      <v-btn icon @click="onClickLogOff">
+        <v-icon>mdi-export</v-icon>
+      </v-btn>
       <v-btn icon>
         <v-icon>mdi-dots-vertical</v-icon>
       </v-btn>
@@ -58,8 +60,6 @@
           </v-list-item>
         </v-list-item-group>
       </v-list>
-
-      
     </v-navigation-drawer>
   </div>
 </template>
@@ -89,6 +89,9 @@ export default {
   methods: {
     onClickMenu(link) {
       this.$router.push(link).catch((err) => {});
+    },
+    onClickLogOff() {
+      this.$store.dispatch("doLogout");
     },
   },
 };

@@ -6,6 +6,8 @@ import Register from "@/views/Register.vue"
 import Option_job from "@/views/Option_job.vue"
 import Test from "@/views/Test_view.vue"
 import About from "@/views/About.vue"
+import Login from "@/views/Login.vue"
+import Profile from "@/views/Profile.vue"
 Vue.use(VueRouter);
 
 const routes = [
@@ -33,6 +35,17 @@ const routes = [
     path: "/about",
     name: "about",
     component:About
+  },
+  {
+    path: "/login",
+    name: "login",
+    component:Login 
+
+  },
+  {
+    path: "/profile",
+    name: "profile",
+    component : Profile
   },
   {
     path: "/test",

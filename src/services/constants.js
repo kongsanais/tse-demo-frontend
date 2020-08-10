@@ -8,9 +8,10 @@ export const apiUrl = "http://localhost:3000";
 export const imageUrl = "http://localhost:3000/images";
 
 export const server = {
-  LOGIN_URL: `login`,
+  LOGIN_URL: `users/login`,
   REGISTER_URL: `users`,
   PRODUCT_URL: `product`,
+  USER_PROFILE: `users/profile`, 
   TRANSACTION_URL: `transaction`,
   REPORT_URL: `report`,
   TOKEN_KEY: `token`,

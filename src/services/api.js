@@ -1,48 +1,50 @@
 import httpClient from "@/services/httpClient";
 import { server } from "@/services/constants";
-import * as productApis from "@/services/api_product";
 import router from "@/router";
 
-// const isLoggedIn = () => {
-//   let token = localStorage.getItem(server.TOKEN_KEY);
-//   return token != null;
-// };
+const isLoggedIn = () => {
+  let token = localStorage.getItem(server.TOKEN_KEY);
+  return token != null;
+};
 
-// const logoff = () => {
-//   localStorage.removeItem(server.TOKEN_KEY);
-//   router.push("/login");
-// };
+const logoff = () => {
+  localStorage.removeItem(server.TOKEN_KEY);
+  router.push("/login");
+};
 
-// const login = async values => {
-//   let result = await httpClient.post(server.LOGIN_URL, values);
-//   if (result.data.result == "ok") {
-//     localStorage.setItem(server.USERNAME, values.username);
-//     localStorage.setItem(server.TOKEN_KEY, result.data.token);
-//     router.push("/stock");
-//     return true;
-//   } else {
-//     return false;
-//   }
-// };
+
+const login = async values => 
+{
+  let result = await httpClient.post(server.LOGIN_URL, values);
+  if (result.data.result == true) 
+  {
+    localStorage.setItem(server.USERNAME, result.data.user.eng_firstname);
+    localStorage.setItem(server.TOKEN_KEY, result.data.token);
+    router.push("/home");
+    return true;
+  } else {
+    return false;
+  }
+};
 
 
 const register = async values => {
   let result = await httpClient.post(server.REGISTER_URL, values);
   return result.data.result;
-  // if (result.data.result == "notok") 
-  // {
-  //   alert("same")
-  // } else {
-  //   alert("ok");
-  // }
-
-
 };
 
+
+const readProfile = async () => {
+  let result =  await httpClient.get(server.USER_PROFILE);
+  return result.data.profile;
+} 
 
 
 
 export default {
   register,
-  ...productApis
+  login,
+  isLoggedIn,
+  logoff,
+  readProfile
 };

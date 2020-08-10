@@ -680,7 +680,7 @@ export default {
       this.tab = "tab-" + tabString;
     },
     async submit() {
-      var check = this.$refs.form.validate();
+      var check;
 
       if (this.applicant.imageURL == null || this.applicant.resumeURL == null) {
         check = false;
@@ -688,27 +688,32 @@ export default {
         check = true;
       }
 
-      if (check == true) {
+      check = this.$refs.form.validate();
+
+      if (check) {
         let formData = new FormData();
+
         Object.keys(this.applicant).forEach((key) =>
           formData.append(key, this.applicant[key])
         );
+
         const check_api_email = await api.register(formData);
 
         if (check_api_email) {
-          this.dialog_messenger.text = "Complete";
-          this.dialog_messenger.sub_text = "";
-          this.dialog_messenger.status = true;
+            this.dialog_messenger.text = "Complete";
+            this.dialog_messenger.sub_text = "";
+            this.dialog_messenger.status = true;
         } else {
-          this.dialog_messenger.text = "Email Same";
-          this.dialog_messenger.sub_text = "";
-          this.dialog_messenger.status = true;
+            this.dialog_messenger.text = "Please Check Your E-mail is Used";
+            this.dialog_messenger.sub_text = "";
+            this.dialog_messenger.status = true;
         }
       } else {
-        this.dialog_messenger.text = "Please Check Your Information";
-        this.dialog_messenger.sub_text = "";
-        this.dialog_messenger.status = true;
+            this.dialog_messenger.text = "Please Check Your Information";
+            this.dialog_messenger.sub_text = "";
+            this.dialog_messenger.status = true;
       }
+
     },
   },
   watch: {
@@ -721,6 +726,6 @@ export default {
 
 <style scoped>
 .disabledTab {
-  pointer-events: none;
+  /* pointer-events: none; */
 }
 </style>

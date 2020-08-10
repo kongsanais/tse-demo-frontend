@@ -36,7 +36,7 @@ export default {
   data: () => ({
     //  
     items: [
-      { text: "Login", icon: "mdi-account-circle-outline" ,link: "" },
+      { text: "Login", icon: "mdi-account-circle-outline" ,link: "/login" },
       { text: "Register", icon: "mdi-account-cog-outline",link: "/register" }
     ],
   }),
