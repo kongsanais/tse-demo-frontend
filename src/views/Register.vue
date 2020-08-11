@@ -394,7 +394,7 @@
                   <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.job_salary"
-                      label="Salary"
+                      label="Salary (Bath)"
                       type="number"
                       min="0"
                       :rules="[(v1) => !!v1 || 'Please Enter Salary']"
@@ -703,6 +703,7 @@ export default {
             this.dialog_messenger.text = "Complete";
             this.dialog_messenger.sub_text = "";
             this.dialog_messenger.status = true;
+            this.$router.push("/login");
         } else {
             this.dialog_messenger.text = "Please Check Your E-mail is Used";
             this.dialog_messenger.sub_text = "";

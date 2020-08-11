@@ -8,7 +8,7 @@ Vue.config.productionTip = false
 import Vue2Filters from "vue2-filters";
 import { imageUrl } from "@/services/constants";
 Vue.use(Vue2Filters);
-
+Vue.use(require('vue-moment'));
 
 new Vue({
   router,

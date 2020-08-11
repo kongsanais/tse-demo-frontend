@@ -1,100 +1,214 @@
 <template>
-  <v-container fluid>
-    <v-row justify="center">
-      <v-expansion-panels popout>
-        <v-expansion-panel
-          v-for="(message, i) in messages"
-          :key="i"
-          hide-actions
-        >
-          <v-expansion-panel-header>
-            <v-row align="center" class="spacer" no-gutters>
+  <v-container grid-list-xs>
+    <v-card>
+      <v-card-title class="headline">
+        <!-- {{profile_data}} -->
+        <v-row>
+          <v-col class="d-flex" xl="2" lg="3" md="12" sm="12" cols="12">
+            <v-card class="mx-auto" width="250px" height="250px" >
+              <img
+                :src="getProductImage()"
+                style="height: 250px; width: 250px;"
+              />
+            </v-card>
+          </v-col>
 
-              <v-col class="d-flex" xl="2" lg="3" md="3" sm="12" cols="12">
-                <v-avatar size="100px">
-                  <img
-                    v-if="message.avatar"
-                    alt="Avatar"
-                    src="https://avatars0.githubusercontent.com/u/9064066?v=4&s=460"
-                  />
-                  <v-icon
-                    v-else
-                    :color="message.color"
-                    v-text="message.icon"
-                  ></v-icon>
-                </v-avatar>
-              </v-col>
+          <v-col class="d-flex" xl="3" lg="4" md="12" sm="12" cols="12">
+            <v-card width="100%">
+              <v-card-title>
+                <v-icon large left color="black">
+                  mdi-badge-account-horizontal-outline
+                </v-icon>
+                <h3>Profile</h3>
+              </v-card-title>
 
-              <v-col class="text-no-wrap" cols="5" sm="3">
-                <v-chip
-                  v-if="message.new"
-                  :color="`${message.color} lighten-4`"
-                  class="ml-0 mr-2 black--text"
-                  label
-                  small
+              <v-card-text class="headline font-weight-bold">
+                  
+
+                <v-text-field
+                  :value="getFullName_eng()"
+                  label="Name ENG"
+                  prepend-icon="mdi-rename-box"
+                  readonly
                 >
-                  {{ message.new }} new
-                </v-chip>
-                <strong v-html="message.title"></strong>
-              </v-col>
+                </v-text-field>
 
-              <v-col
-                v-if="message.excerpt"
-                class="grey--text text-truncate hidden-sm-and-down"
-              >
-                &mdash;
-                {{ message.excerpt }}
-              </v-col>
-            </v-row>
-          </v-expansion-panel-header>
 
-          <v-expansion-panel-content>
-            <v-divider></v-divider>
-            <v-card-text v-text="lorem"></v-card-text>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
-    </v-row>
-    {{ profile_data }}
+                <v-text-field
+                  :value="getFullName_th()"
+                  label="Name TH"
+                  prepend-icon="mdi-rename-box"
+                  readonly
+                >
+                </v-text-field>
+
+
+                <v-text-field
+                  :value="getDateFormat(profile_data.date_birthday)"
+                  label="Birthday"
+                  prepend-icon="event"
+                  readonly
+                >
+                </v-text-field>
+
+                 
+                 <v-textarea
+                      v-model="profile_data.eng_address"
+                      label="Address / ที่อยู่อาศัย"
+                      readonly
+                      outlined
+                      rows="5"
+                      row-height="25"
+                      shaped
+                ></v-textarea>
+
+
+              </v-card-text>
+            </v-card>
+          </v-col>
+
+         <v-col class="d-flex" xl="3" lg="4" md="12" sm="12" cols="12">
+            <v-card width="100%">
+              <v-card-title>
+                <v-icon large left color="black">
+                  mdi-card-account-phone
+                </v-icon>
+                <h3>Contact</h3>
+              </v-card-title>
+
+              <v-card-text class="headline font-weight-bold">
+                
+                <v-text-field
+                  v-model="profile_data.email"
+                  label="Email"
+                  prepend-icon="mdi-email-box"
+                  readonly
+                >
+                </v-text-field>
+
+
+                <v-text-field
+                  v-model="profile_data.phone_number"
+                  label="Phone"
+                  prepend-icon="mdi-rename-box"
+                  readonly
+                >
+                </v-text-field>
+
+                <v-text-field
+                  :value="getPhone_Fmaliy()"
+                  label="Phone Family"
+                  prepend-icon="mdi-cellphone"
+                  readonly
+                >
+                </v-text-field>
+
+              </v-card-text>
+            </v-card>
+          </v-col>
+
+        
+        <v-col class="d-flex" xl="3" lg="4" md="12" sm="12" cols="12">
+            <v-card width="100%">
+              <v-card-title>
+                <v-icon large left color="black">
+                  mdi-card-account-phone
+                </v-icon>
+                <h3>Resume / CV</h3>
+              </v-card-title>
+
+              <v-card-text class="headline font-weight-bold">
+                
+                <v-text-field
+                  :value="getLevelandPosition()"
+                  label="Level / Position"
+                  prepend-icon="mdi-tablet-dashboard"
+                  readonly
+                >
+                </v-text-field>
+
+
+                <v-text-field
+                  v-model="profile_data.job_salary"
+                  label="Salary ( Bath ) "
+                  prepend-icon="mdi-bitcoin"
+                  readonly
+                >
+                </v-text-field>
+
+                <v-btn
+                color="blue-grey"
+                class="ma-2 white--text"
+                href="https://www.w3schools.com/images/myw3schoolsimage.jpg"
+                target="_blank"
+                download>
+                Download Resume
+                <v-icon right dark>mdi-cloud-upload</v-icon>
+                </v-btn>
+
+
+
+
+              </v-card-text>
+            </v-card>
+          </v-col>
+
+
+        </v-row>
+      </v-card-title>
+
+      <v-card-text>
+        - app for - level - soralar
+      </v-card-text>
+
+      <!-- <v-card-actions>
+        <v-btn text>Listen Now</v-btn>
+      </v-card-actions> -->
+    </v-card>
   </v-container>
 </template>
-
 <script>
 import api from "@/services/api";
 import { imageUrl } from "@/services/constants";
+import moment from 'moment'
 export default {
   data: () => ({
-    messages: [
-      {
-        avatar: "https://avatars0.githubusercontent.com/u/9064066?v=4&s=460",
-        name: "John Leider",
-        title: "Welcome to Vuetify.js!",
-        excerpt: "Thank you for joining our community...",
-      },
-      {
-        color: "red",
-        icon: "people",
-        name: "Social",
-
-        total: 3,
-        title: "Twitter",
-      },
-      {
-        color: "teal",
-        icon: "local_offer",
-        name: "Promos",
-        total: 4,
-        title: "Online Test",
-        exceprt: "New deals available, Join Today",
-      },
-    ],
-    lorem:
-      "Lorem ipsum dolor sit amet, at aliquam vivendum vel, everti delicatissimi cu eos. Dico iuvaret debitis mel an, et cum zril menandri. Eum in consul legimus accusam. Ea dico abhorreant duo, quo illum minimum incorrupte no, nostro voluptaria sea eu. Suas eligendi ius at, at nemore equidem est. Sed in error hendrerit, in consul constituam cum.",
     profile_data: [],
   }),
   async mounted() {
     let result = await api.readProfile();
     this.profile_data = result;
+
+  },
+  methods: {
+    getProductImage() {
+      if (this.profile_data.imageURL.length > 100) {
+        return this.profile_data.imageURL;
+      } else {
+        return this.$options.filters.imageUrl(this.profile_data.imageURL);
+      }
+    },
+    getDateFormat(date_iso) {
+      var  date = new Date(date_iso);
+      var real_day = moment(date).format('ddd, ll');
+      return real_day + " / Age : " + this.profile_data.age;
+    },  
+    getFullName_eng(){
+      let full_ENG_name  =  this.profile_data.eng_prefix +" " + this.profile_data.eng_firstname + " " + this.profile_data.eng_lastname;
+      return  full_ENG_name;
+    },
+    getFullName_th(){
+      let full_TH_name  = this.profile_data.th_prefix + " " + this.profile_data.th_firstname + " " + this.profile_data.th_lastname;
+      return  full_TH_name;
+    },
+    getPhone_Fmaliy(){
+      let phone_fmaliy  = this.profile_data.phone_number_famaily + " " +"("+this.profile_data.person_relationship+")";
+      return  phone_fmaliy;
+    },
+    getLevelandPosition(){
+      let level_position  = this.profile_data.job_level + " : " + this.profile_data.job_position;
+      return  level_position;
+    }
   },
 };
 </script>
