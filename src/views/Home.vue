@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <div>
-  <v-carousel :show-arrows="false" height="830">
+  <v-carousel :show-arrows="false" height="830" class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12" >
     <v-carousel-item
       v-for="(item,i) in items"
       :key="i"

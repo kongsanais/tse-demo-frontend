@@ -13,7 +13,7 @@
           <h4>Login & Register / เข้าสู่ระบบ & สมัคร</h4>
           <v-list >
             <!-- <v-subheader>text</v-subheader> -->
-            <v-list-item-group v-model="item" color="primary">
+            <v-list-item-group v-model="items" color="primary">
               <v-list-item v-for="(item, i) in items" :key="i" @click="onClickMenu(item.link)">
                 <v-list-item-icon>
                   <v-icon v-text="item.icon"></v-icon>

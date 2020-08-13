@@ -13,7 +13,7 @@
           <h4>Job Openings / ตำแหน่งงานที่เปิดรับ</h4>
           <v-list >
             <!-- <v-subheader>text</v-subheader> -->
-            <v-list-item-group v-model="item" color="primary">
+            <v-list-item-group v-model="items" color="primary">
               <v-list-item v-for="(item, i) in items" :key="i" @click="onClickMenu(item.link)">
                 <v-list-item-icon>
                   <v-icon v-text="item.icon"></v-icon>
@@ -37,7 +37,7 @@ export default {
     //  
     items: [
       { text: "Engineer & Management", icon: "mdi-account-circle-outline" ,link: "/option_job" },
-      { text: "Production", icon: "mdi-account-cog-outline",link: "/job" }
+      { text: "Production", icon: "mdi-account-cog-outline",link: "/option_job" }
     ],
   }),
   methods: {

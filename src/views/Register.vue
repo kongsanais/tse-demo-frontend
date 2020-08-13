@@ -21,7 +21,7 @@
           <v-tab-item value="tab-1">
             <v-card flat>
               <v-card-text>
-                {{ applicant }}
+                <!-- {{ applicant }} -->
                 <v-row>
                   <!-- E-mail -->
                   <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
@@ -197,7 +197,7 @@
                       label="Address / ที่อยู่อาศัย"
                       auto-grow
                       outlined
-                      rows="5"
+                      rows="3"
                       row-height="25"
                       v-model="applicant.eng_address"
                       :rules="[(v1) => !!v1 || 'Pleace Enter your Address']"
@@ -477,7 +477,7 @@
       </v-card>
     </v-form>
 
-    <v-dialog v-model="dialog_messenger.status" max-width="480">
+    <v-dialog v-model="dialog_messenger.status" persistent max-width="480">
       <v-card>
         <v-card-title class="headline grey lighten-2">
           {{ dialog_messenger.title }}
@@ -508,7 +508,7 @@
             class="primary"
             light
             text
-            @click="dialog_messenger.status = false"
+            @click="onClickMenu(dialog_messenger.router)"
           >
             Agree
           </v-btn>
@@ -591,6 +591,7 @@ export default {
       title: "Message",
       text: "",
       sub_text: "",
+      router: "",
     },
   }),
   methods: {
@@ -662,7 +663,10 @@ export default {
       //check file type and type file //
       if (
         _size < 10485760 &&
-        (_file_type == "pdf" || _file_type == "docx" || _file_type == "doc")
+        (_file_type == "pdf" ||
+          _file_type == "docx" ||
+          _file_type == "doc" ||
+          _file_type == "png")
       ) {
         reader.readAsDataURL(event.target.files[0]);
         // for upload
@@ -671,13 +675,19 @@ export default {
       } else {
         this.dialog_messenger.text = "Please Check Resume Size and File Type";
         this.dialog_messenger.sub_text =
-          "- Resume Size < 10 mb <br> - Resume/CV Should be .PDF  .DOC   .DOCX ";
+          "- Resume Size < 10 mb <br> - Resume/CV Should be .PDF  .DOC   .DOCX  .PNG";
         this.dialog_messenger.status = true;
         this.applicant.resumeURL = null;
       }
     },
     changeTab(tabString) {
       this.tab = "tab-" + tabString;
+    },
+    onClickMenu(link) {
+      this.dialog_messenger.status = false;
+      if (link == "/login") {
+        this.$router.push(link).catch((err) => {});
+      }
     },
     async submit() {
       var check;
@@ -692,7 +702,6 @@ export default {
 
       if (check) {
         let formData = new FormData();
-
         Object.keys(this.applicant).forEach((key) =>
           formData.append(key, this.applicant[key])
         );
@@ -700,21 +709,20 @@ export default {
         const check_api_email = await api.register(formData);
 
         if (check_api_email) {
-            this.dialog_messenger.text = "Complete";
-            this.dialog_messenger.sub_text = "";
-            this.dialog_messenger.status = true;
-            this.$router.push("/login");
+          this.dialog_messenger.text = "Complete";
+          this.dialog_messenger.sub_text = "";
+          this.dialog_messenger.status = true;
+          this.dialog_messenger.router = "/login";
         } else {
-            this.dialog_messenger.text = "Please Check Your E-mail is Used";
-            this.dialog_messenger.sub_text = "";
-            this.dialog_messenger.status = true;
+          this.dialog_messenger.text = "Please Check Your E-mail is Used";
+          this.dialog_messenger.sub_text = "";
+          this.dialog_messenger.status = true;
         }
       } else {
-            this.dialog_messenger.text = "Please Check Your Information";
-            this.dialog_messenger.sub_text = "";
-            this.dialog_messenger.status = true;
+        this.dialog_messenger.text = "Please Check Your Information";
+        this.dialog_messenger.sub_text = "";
+        this.dialog_messenger.status = true;
       }
-
     },
   },
   watch: {

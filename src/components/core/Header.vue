@@ -5,24 +5,29 @@
         @click.stop="drawer = !drawer"
         class="d-xl-none"
       ></v-app-bar-nav-icon>
+
       <v-img
-        class="mx-2"
-        src="https://image.flaticon.com/icons/svg/882/882747.svg"
-        max-height="130"
-        max-width="130"
+        max-height="145"
+        max-width="200"
+         src="@/assets/samsung-icon.png"
         contain
-      ></v-img>
+      >
+      </v-img>
+
       <v-spacer></v-spacer>
 
-      <div v-for="([title, route], index) in top_right_menu" :key="index">
-        <v-btn class="mr-2 d-none d-sm-flex" @click="onClickMenu(route)">
+      <div  v-for="([title, route], index) in top_right_menu" :key="index">
+        <v-btn  v-if="!$store.state.isLogged"  class="mr-2 d-none d-sm-flex" @click="onClickMenu(route)">
           {{ title }}
         </v-btn>
       </div>
-      <span>{{ $store.getters["username"]  | capitalize }}</span>
-      <v-btn icon @click="onClickLogOff">
+      <v-icon v-if="$store.state.isLogged" class="mr-2">mdi-account-circle</v-icon>
+      <span v-if="$store.state.isLogged" class="mr-2"><b>Welcome</b></span>
+      <span v-if="$store.state.isLogged" ><b>{{ $store.getters["username"]  | capitalize }}</b></span>
+      <v-btn v-if="$store.state.isLogged" icon @click="onClickLogOff">
         <v-icon>mdi-export</v-icon>
       </v-btn>
+
       <v-btn icon>
         <v-icon>mdi-dots-vertical</v-icon>
       </v-btn>
@@ -41,8 +46,8 @@
         <v-img src="@/assets/tsc-icon.png" alt="" width="100%" />
       </router-link>
 
-      <v-list>
-        <v-list-item-group v-model="selectedMenu" mandatory color="primary">
+      <v-list >
+        <v-list-item-group v-model="selectedMenu" mandatory color="primary" >
           <v-subheader>MENUS</v-subheader>
           <v-list-item
             class="tile"

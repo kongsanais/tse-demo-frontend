@@ -1,7 +1,6 @@
-const mongoose = require('mongoose')
 
-mongoose.connect('mongodb://127.0.0.1:27017/hr-project-api', {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false
-})
+const config = require('./config.json');
+const mongoose = require('mongoose');
+const connectionOptions = { useCreateIndex: true, useNewUrlParser: true, useFindAndModify: false };
+mongoose.connect(process.env.MONGODB_URI || config.connectionString, connectionOptions);
+mongoose.Promise = global.Promise;

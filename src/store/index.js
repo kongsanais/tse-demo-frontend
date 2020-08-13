@@ -38,9 +38,9 @@ export default new Vuex.Store({
         let username = localStorage.getItem(server.USERNAME);
         commit("SET_USERNAME", username);
       } 
-      else {
-        dispatch("doLogout", {});
-      }
+      // else {
+      //   dispatch("doLogout", {});
+      // }
     },
     doLogout({ commit }) {
       api.logoff();

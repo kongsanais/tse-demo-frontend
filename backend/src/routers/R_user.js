@@ -85,9 +85,9 @@ router.post('/users/login', async (req, res) => {
       const user = await User.findByCredentials(req.body.email, req.body.password)
       const token = await user.generateAuthToken()
       res.send({result:true,user,token })
-      
     } catch (e) {
-      res.status(400).send()
+      res.send({result:false})
+      console.log("fail")
   }
 
 })
@@ -101,7 +101,6 @@ router.post('/users/logout', auth, async (req, res) => {
             return token.token !== req.token
         })
         await req.user.save()
-
         res.send()
     } catch (e) {
         res.status(500).send()
@@ -148,6 +147,7 @@ router.post('/users/logoutAll', auth, async (req, res) => {
 //         res.status(400).send(e)
 //     }
 // })
+
 
 // router.delete('/users/me', auth, async (req, res) => {
 //     try {

@@ -9,7 +9,6 @@ app.use(cors())
 const port = process.env.PORT || 3000
 app.use(express.json())
 app.use(userRouter)
-
 app.use(express.static(__dirname + "/uploaded"))
 
 

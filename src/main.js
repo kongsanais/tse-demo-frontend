@@ -7,6 +7,9 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'//https://
 Vue.config.productionTip = false
 import Vue2Filters from "vue2-filters";
 import { imageUrl } from "@/services/constants";
+import { resumeUrl} from "@/services/constants";
+
+
 Vue.use(Vue2Filters);
 Vue.use(require('vue-moment'));
 
@@ -19,7 +22,13 @@ new Vue({
 
 
 
+
 Vue.filter("imageUrl", function(image) {
   return `${imageUrl}/${image}?timestamp=${Date.now()}`;
+});
+
+
+Vue.filter("resumeUrl", function(resume) {
+  return `${resumeUrl}/${resume}`;
 });
 

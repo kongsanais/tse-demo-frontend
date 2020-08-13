@@ -6,14 +6,20 @@ export const NOT_CONNECT_NETWORK = "NOT_CONNECT_NETWORK";
 
 export const apiUrl = "http://localhost:3000";
 export const imageUrl = "http://localhost:3000/images";
+export const resumeUrl = "http://localhost:3000/resume"
+
+
+
 
 export const server = {
   LOGIN_URL: `users/login`,
   REGISTER_URL: `users`,
-  PRODUCT_URL: `product`,
-  USER_PROFILE: `users/profile`, 
+  USER_PROFILE: `users/profile`,
+  LOGOUT_URL: `users/logout`,
   TRANSACTION_URL: `transaction`,
   REPORT_URL: `report`,
   TOKEN_KEY: `token`,
   USERNAME: `username`
 };
+
+

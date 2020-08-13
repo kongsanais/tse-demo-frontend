@@ -7,10 +7,12 @@ const isLoggedIn = () => {
   return token != null;
 };
 
-const logoff = () => {
+const logoff = async () => {
+  await httpClient.post(server.LOGOUT_URL);
   localStorage.removeItem(server.TOKEN_KEY);
   router.push("/login");
 };
+
 
 
 const login = async values => 
@@ -20,7 +22,7 @@ const login = async values =>
   {
     localStorage.setItem(server.USERNAME, result.data.user.eng_firstname);
     localStorage.setItem(server.TOKEN_KEY, result.data.token);
-    router.push("/home");
+    router.push("/profile");
     return true;
   } else {
     return false;
