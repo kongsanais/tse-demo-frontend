@@ -3,7 +3,7 @@
     <v-form @submit.prevent="submit" ref="form" v-model="valid" lazy-validation>
       <v-card>
         <v-toolbar flat color="primary" dark>
-          <v-toolbar-title>Form Register</v-toolbar-title>
+          <v-toolbar-title>แบบฟอร์มสมัครงาน ( ฝ่ายผลิต )</v-toolbar-title>
         </v-toolbar>
 
         <v-tabs v-model="tab" vertical>
@@ -24,27 +24,27 @@
                 <!-- {{ applicant }} -->
                 <v-row>
                   <!-- E-mail -->
-                  <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="4" lg="4" md="3" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.email"
                       type="email"
-                      label="Email"
+                      label="อีเมล"
                       :rules="[
-                        (v1) => !!v1 || 'Email is required',
+                        (v1) => !!v1 || 'โปรดใส่ อีเมล ',
                         (v2) =>
                           !!/^(([^<>()[\]\\.,;:\s@\&quot;]+(\.[^<>()[\]\\.,;:\s@\&quot;]+)*)|(\&quot;.+\&quot;))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
                             v2
-                          ) || 'Please Enter Email',
+                          ) || 'ตรวจสอบอีเมล',
                       ]"
                     >
                     </v-text-field>
                   </v-col>
 
                   <!-- Password -->
-                  <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="4" lg="4" md="3" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.password"
-                      label="Password"
+                      label="รหัสผ่าน"
                       min="8"
                       :append-icon="
                         show_password ? 'visibility' : 'visibility_off'
@@ -52,20 +52,20 @@
                       @click:append="show_password = !show_password"
                       :type="show_password ? 'password' : 'text'"
                       :rules="[
-                        (v1) => !!v1 || 'Password is required',
+                        (v1) => !!v1 || 'โปรดใส่ รหัสผ่าน',
                         (v2) =>
                           !!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(v2) ||
-                          'Minimum eight characters, at least one letter and one number',
+                          'รหัสผ่านต้องมากว่า 8 ตัว และ มีตัวอักษรกับตัวเลข',
                       ]"
                       required
                     />
                   </v-col>
 
                   <!-- Confirm Password -->
-                  <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="4" lg="4" md="3" sm="12" cols="12">
                     <v-text-field
                       v-model="checkpassword"
-                      label="Confirm Password"
+                      label="ยืนยันรหัสผ่าน"
                       min="8"
                       :append-icon="
                         show_password_con ? 'visibility' : 'visibility_off'
@@ -74,9 +74,9 @@
                       :type="show_password_con ? 'password' : 'text'"
                       :rules="[
                         applicant.password === checkpassword ||
-                          'Password must match',
+                          'รหัสผ่านไม่ตรงกัน',
                         (checkpassword) =>
-                          !!checkpassword || 'Pleace Enter your Password',
+                          !!checkpassword || 'โปรดใส่ รหัสผ่าน',
                       ]"
                       required
                     />
@@ -87,8 +87,8 @@
                     <v-select
                       :items="data_th_prefix"
                       v-model="applicant.th_prefix"
-                      label="คำนำหน้า"
-                      :rules="[(v1) => !!v1 || 'Please Select TH First Name']"
+                      label="คำนำหน้า ( ภาษาไทย )"
+                      :rules="[(v1) => !!v1 || 'โปรดเลือกคำนำหน้า']"
                       outlined
                     >
                     </v-select>
@@ -98,18 +98,18 @@
                   <v-col class="d-flex" xl="5" lg="4" md="3" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.th_firstname"
-                      label="ชื่อ"
-                      :rules="[(v1) => !!v1 || 'Please Enter TH First Name']"
+                      label="ชื่อ ( ภาษาไทย )"
+                      :rules="[(v1) => !!v1 || 'โปรดใส่ชื่อภาษาไทย']"
                     >
                     </v-text-field>
                   </v-col>
 
                   <!-- TH lastname -->
-                  <v-col class="d-flex" xl="5" lg="5" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="5" lg="4" md="3" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.th_lastname"
-                      label="นามสกุล"
-                      :rules="[(v1) => !!v1 || 'Please Enter TH Last Name']"
+                      label="นามสกุล ( ภาษาไทย )"
+                      :rules="[(v1) => !!v1 || 'โปรดใส่นามสกุล']"
                     >
                     </v-text-field>
                   </v-col>
@@ -117,20 +117,20 @@
                   <!-- EN prefix -->
                   <v-col class="d-flex" xl="2" lg="3" md="3" sm="12" cols="12">
                     <v-select
-                      label="Prefix"
+                      label="คำนำหน้า ( ภาษาอังกฤษ )"
                       :items="data_eng_prefix"
                       v-model="applicant.eng_prefix"
-                      :rules="[(v1) => !!v1 || 'Please Enter eng-prefix']"
+                      :rules="[(v1) => !!v1 || 'โปรดเลือกคำนำหน้า']"
                       outlined
                     ></v-select>
                   </v-col>
 
                   <!-- EN fristname -->
-                  <v-col class="d-flex" xl="5" lg="4" md="3" sm="12" cols="12">
+                  <v-col class="d-flex mb-1" xl="5" lg="4" md="3" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.eng_firstname"
-                      label="Frist Name"
-                      :rules="[(v1) => !!v1 || 'Please Enter  ENG First Name']"
+                      label="ชื่อ ( ภาษาอังกฤษ )"
+                      :rules="[(v1) => !!v1 || 'โปรดใส่ชื่อภาษาอังกฤษ']"
                     >
                     </v-text-field>
                   </v-col>
@@ -139,74 +139,72 @@
                   <v-col class="d-flex" xl="5" lg="4" md="3" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.eng_lastname"
-                      label="Last Name"
-                      :rules="[(v1) => !!v1 || 'Please Enter ENG Last Name']"
+                      label="นามสกุล ( ภาษาอังกฤษ ) "
+                      :rules="[(v1) => !!v1 || 'โปรดใส่นามสกุลภาษาอังกฤษ']"
                     >
                     </v-text-field>
                   </v-col>
 
                   <!-- Nationality -->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="3" cols="12">
-                    <v-select
+                  <v-col class="d-flex" xl="3" lg="6" md="3" sm="3" cols="12">
+                      <v-text-field
                       v-model="applicant.nationality"
-                      :items="CountryList"
-                      label="Nationality"
-                      :rules="[
-                        (v1) => !!v1 || 'Please Select Your Nationality',
-                      ]"
-                    ></v-select>
+                      label="สัญชาติ "
+                      :rules="[(v1) => !!v1 || 'โปรดใส่สัญชาติ']"
+                    >
+                    </v-text-field>
                   </v-col>
 
                   <!-- Phone number -->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="3" cols="12">
+                  <v-col class="d-flex" xl="3" lg="6" md="3" sm="3" cols="12">
                     <v-text-field
                       v-model="applicant.phone_number"
-                      label="Your Phone Number"
+                      label="เบอร์ โทรศัพท์"
                       type="number"
                       min="0"
-                      :rules="[(v1) => !!v1 || 'Please Enter Phone Number']"
+                      :rules="[(v1) => !!v1 || 'โปรดใส่เบอร์โทรศัพท์']"
                     >
                     </v-text-field>
                   </v-col>
 
                   <!-- Phone number  family-->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="3" cols="12">
+                  <v-col class="d-flex" xl="3" lg="6" md="3" sm="3" cols="12">
                     <v-text-field
                       v-model="applicant.phone_number_famaily"
-                      label="Phone Number Family"
+                      label="เบอร์โทรบุลคลที่ติดต่อได้กรณีฉุกเฉิน"
                       type="number"
                       min="0"
-                      :rules="[(v1) => !!v1 || 'Please Enter Phone Number']"
+                      :rules="[(v1) => !!v1 || 'โปรดใส่เบอร์โทรศัพท์']"
                     >
                     </v-text-field>
                   </v-col>
 
                   <!-- Relationship -->
-                  <v-col class="d-flex" xl="3" lg="3" md="2" sm="3" cols="12">
-                    <v-select
+                  <v-col class="d-flex" xl="3" lg="6" md="2" sm="3" cols="12">
+                    <v-text-field
                       v-model="applicant.person_relationship"
-                      :items="data_Relationship"
-                      label="Relationship"
-                      :rules="[(v1) => !!v1 || 'Pleace Select Relationship']"
-                    ></v-select>
+                      label="ความสัมพันธ์ เช่น (บิดา, มารดา) "
+                      :rules="[(v1) => !!v1 || 'โปรดใส่ข้อมูล']"
+                    >
+                    </v-text-field>
                   </v-col>
 
                   <!-- Address -->
                   <v-col cols="12" md="6">
                     <v-textarea
-                      label="Address / ที่อยู่อาศัย"
+                      label="ที่อยู่อาศัยปัจจุบัน"
                       auto-grow
                       outlined
                       rows="3"
                       row-height="25"
                       v-model="applicant.eng_address"
-                      :rules="[(v1) => !!v1 || 'Pleace Enter your Address']"
+                      :rules="[(v1) => !!v1 || 'โปรดใส่ที่อยู่อาศัยปัจจุบัน']"
                       shaped
                     ></v-textarea>
                   </v-col>
 
                   <!--  Birthday  -->
-                  <v-col class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12">
+                  <v-col class="d-flex" xl="4" lg="6" md="3" sm="12" cols="12">
                     <v-menu
                       ref="date_menu"
                       v-model="date_menu"
@@ -215,16 +213,17 @@
                       transition="scale-transition"
                       min-width="290px"
                     >
+                    
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
                           v-model="applicant.date_birthday"
-                          label="Your Birthday"
+                          label="วันเกิดของผู้สมัคร"
                           prepend-icon="event"
                           readonly
                           v-bind="attrs"
                           v-on="on"
                           :rules="[
-                            (v1) => !!v1 || 'Pleace Enter your birthday',
+                            (v1) => !!v1 || 'โปรดใส่ข้อมูล',
                           ]"
                         >
                         </v-text-field>
@@ -234,6 +233,7 @@
                         v-model="applicant.date_birthday"
                         @input="date_menu = false"
                         ref="picker"
+                        locale="th"
                         v-on:change="DateToAge(applicant.date_birthday)"
                         :max="new Date().toISOString().substr(0, 10)"
                         min="1950-01-01"
@@ -257,7 +257,7 @@
                 <v-row>
                   <v-spacer></v-spacer>
                   <v-btn class="primary mr-3" @click="changeTab(2)">
-                    Next
+                    ต่อไป
                   </v-btn>
                 </v-row>
               </v-card-text>
@@ -269,21 +269,24 @@
               <v-card-text>
                 <v-row>
                   <!-- Review imgage -->
+
                   <v-col class="d-flex" xl="2" lg="4" md="4" sm="12" cols="12">
+                  <v-card class="mx-auto" width="230px" height="250px">
                     <img
                       v-if="imageURL"
                       :src="imageURL"
-                      style="width=height:150px;width:220px;border-style: groove;"
+                      style="height: 250px; width: 230px;"
                     />
+                  </v-card>
                   </v-col>
 
                   <!-- upload img file input and resume -->
-                  <v-col class="d-flex" xl="5" lg="4" md="6" sm="12" cols="12">
+                  <v-col class="d-flex" xl="5" lg="6" md="6" sm="12" cols="12">
                     <v-card outlined>
                       <v-list-item>
                         <v-list-item-content>
                           <v-list-item-title class="headline mb-6"
-                            >Upload</v-list-item-title
+                            >อัพโหลดรูปภาพ</v-list-item-title
                           >
                           <v-list-item-subtitle>
                             <!--btn upload profile picture-->
@@ -320,42 +323,8 @@
                               :rules="[(v1) => !!v1 || 'Please Upload Picture']"
                             />
 
-                            <br />
 
-                            <!-- btn upload resume/cv -->
-                            <v-btn
-                              class="mt-3 mr-1"
-                              depressed
-                              color="#"
-                              @click="$refs.inputUpload_resume.click()"
-                              v-model="message_filename_resume"
-                            >
-                              <!-- i-con in btn -->
-                              <v-icon class="mr-2">mdi-cloud-upload</v-icon>
-                              {{ message_filename_resume }}
-                            </v-btn>
 
-                            <!-- i-con check  if -->
-                            <v-icon
-                              v-if="applicant.resumeURL == null"
-                              color="warning"
-                              class="mdi mdi-36px mt-3"
-                              >mdi-alert-circle-outline</v-icon
-                            >
-                            <v-icon v-else color="success" class="mdi mdi-36px"
-                              >mdi-check-circle-outline</v-icon
-                            >
-
-                            <!-- input file for upload  -->
-                            <input
-                              type="file"
-                              style="display: none"
-                              ref="inputUpload_resume"
-                              @change="onFile_resume"
-                              :rules="[
-                                (v1) => !!v1 || 'Please Upload Resume / CV',
-                              ]"
-                            />
                           </v-list-item-subtitle>
                         </v-list-item-content>
                       </v-list-item>
@@ -363,9 +332,38 @@
                   </v-col>
                 </v-row>
 
-                <v-row>
-                  <!-- Level -->
+
+                 <v-row>
+
+                  <!-- Education -->
                   <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                    <v-text-field
+                      v-model="applicant.education"
+                      label="การศึกษาสูงสุด"
+                      :rules="[(v1) => !!v1 || 'Please Enter Education']"
+                    >
+                    </v-text-field>
+                  </v-col>
+
+                  <!-- Gpa -->
+                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                    <v-text-field
+                      v-model="applicant.gpa"
+                      label="เกรดเฉลี่ยล่าสุด"
+                      type="number"
+                      min="0"
+                      :rules="[(v1) => !!v1 || 'Please Enter GPA']"
+                    >
+                    </v-text-field>
+                  </v-col>
+
+                </v-row>
+
+              
+                <v-row>
+
+                  <!-- Level -->
+                  <!-- <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
                     <v-select
                       v-model="applicant.job_level"
                       :items="data_level"
@@ -373,25 +371,22 @@
                       :rules="[(v1) => !!v1 || 'Please Select Level']"
                     >
                     </v-select>
-                  </v-col>
-                </v-row>
-
-                <v-row>
+                  </v-col> -->
+                  
                   <!-- Position -->
                   <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
                     <v-select
                       v-model="applicant.job_position"
                       :items="data_position"
-                      label="Position"
+                      label="ตำแหน่งงานที่สมัคร"
                       :rules="[(v1) => !!v1 || 'Please Select Position']"
                     >
                     </v-select>
-                  </v-col>
-                </v-row>
 
-                <v-row>
+                  </v-col>
+
                   <!-- Salary -->
-                  <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
+                  <!-- <v-col class="d-flex" xl="3" lg="3" md="3" sm="12" cols="12">
                     <v-text-field
                       v-model="applicant.job_salary"
                       label="Salary (Bath)"
@@ -400,16 +395,18 @@
                       :rules="[(v1) => !!v1 || 'Please Enter Salary']"
                     >
                     </v-text-field>
-                  </v-col>
+                  </v-col> -->
+
                 </v-row>
+
                 <v-row>
                   <v-spacer></v-spacer>
                   <v-btn @click="changeTab(1)" class="mr-3">
-                    Back
+                    กลับ
                   </v-btn>
 
                   <v-btn @click="changeTab(3)" class="primary">
-                    Next
+                    ต่อไป
                   </v-btn>
                 </v-row>
               </v-card-text>
@@ -420,7 +417,7 @@
             <v-card flat>
               <v-card-text>
                 <h2 class="mt-2 mb-3">
-                  Privacy policy/นโยบายความเป็นส่วนตัว
+                  นโยบายความเป็นส่วนตัว
                 </h2>
 
                 <p class="mb-0">
@@ -446,7 +443,7 @@
                   <v-checkbox
                     v-model="checked_ac"
                     class="ml-2"
-                    label="Accept"
+                    label="ยืนยัน"
                     type="checkbox"
                     small
                     :rules="[(v1) => !!v1 || 'Pleace Accept Privacy Policy']"
@@ -459,15 +456,14 @@
                   <v-spacer></v-spacer>
 
                   <v-btn @click="changeTab(2)" class="mr-3">
-                    Back
+                    กลับ
                   </v-btn>
 
                   <v-btn
                     class="success mr-3"
                     type="submit"
-                    @click.stop="dialog_messenger.status = true"
                   >
-                    Submit
+                    ยืนยันการสมัคร
                   </v-btn>
                 </v-row>
               </v-card-text>
@@ -515,6 +511,29 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog
+      v-model="dialog_load.status"
+      hide-overlay
+      persistent
+      width="300"
+    >
+      <v-card
+        color="primary"
+        dark
+      >
+        <v-card-text>
+          Please stand by
+          <v-progress-linear
+            indeterminate
+            color="white"
+            class="mb-0"
+          ></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
+
   </v-container>
 </template>
 
@@ -542,7 +561,10 @@ export default {
       resumeURL: null,
       job_level: null,
       job_position: "",
-      job_salary: "",
+      job_salary: "", 
+      education:"",
+      gpa:"",
+      role:"Production"
     },
     checked_ac: false,
     data_th_prefix: ["นาย", "นาง", "นางสาว"],
@@ -563,30 +585,37 @@ export default {
     date_menu: false, //for date
     imageURL: "https://image.flaticon.com/icons/svg/882/882849.svg",
     CountryList: ["Thailand"],
-    message_filename_pic: "Upload Profile Picture",
+    message_filename_pic: "อัพโหลดรูปภาพของคุณ",
     message_filename_resume: " Upload Resume / CV",
     tab: "tab-1",
     tabs: [
       {
         id: 1,
         icon: "mdi-account",
-        name: "FORM 1",
+        name: "ฟอร์ม 1",
         href_tab: "#tab-1",
       },
       {
         id: 2,
         icon: "mdi-clipboard-file-outline",
-        name: "FORM 2",
+        name: "ฟอร์ม 2",
         href_tab: "#tab-2",
       },
       {
         id: 3,
         icon: "mdi-clipboard-check-outline",
-        name: "FORM 3",
+        name: "ฟอร์ม 3",
         href_tab: "#tab-3",
       },
     ],
     dialog_messenger: {
+      status: false,
+      title: "Message",
+      text: "",
+      sub_text: "",
+      router: "",
+    },
+    dialog_load: {
       status: false,
       title: "Message",
       text: "",
@@ -629,10 +658,8 @@ export default {
       //console.log("FILE SIZE = ", exactSize);
       //check file type and type file //
       //10mb
-      if (
-        _size < 10485760 &&
-        (_file_type == "png" || _file_type == "jpg" || _file_type == "jpeg")
-      ) {
+      
+      if (_size < 10485760 && (_file_type == "png" || _file_type == "jpg" || _file_type == "jpeg" || _file_type == "PNG" || _file_type == "JPG")) {
         reader.readAsDataURL(event.target.files[0]);
         // for upload
         this.applicant.imageURL = event.target.files[0];
@@ -692,7 +719,7 @@ export default {
     async submit() {
       var check;
 
-      if (this.applicant.imageURL == null || this.applicant.resumeURL == null) {
+      if (this.applicant.imageURL == null) {
         check = false;
       } else {
         check = true;
@@ -701,15 +728,16 @@ export default {
       check = this.$refs.form.validate();
 
       if (check) {
+        
         let formData = new FormData();
         Object.keys(this.applicant).forEach((key) =>
-          formData.append(key, this.applicant[key])
+           formData.append(key, this.applicant[key])
         );
 
-        const check_api_email = await api.register(formData);
-
-        if (check_api_email) {
-          this.dialog_messenger.text = "Complete";
+          this.dialog_load.status = true;
+        if (await api.register(formData)) {
+          this.dialog_load.status = false;
+          this.dialog_messenger.text = "Complete GO Login";
           this.dialog_messenger.sub_text = "";
           this.dialog_messenger.status = true;
           this.dialog_messenger.router = "/login";
@@ -718,6 +746,8 @@ export default {
           this.dialog_messenger.sub_text = "";
           this.dialog_messenger.status = true;
         }
+
+
       } else {
         this.dialog_messenger.text = "Please Check Your Information";
         this.dialog_messenger.sub_text = "";

@@ -1,19 +1,30 @@
 <template>
-  <v-container>
-    <div>
-  <v-carousel :show-arrows="false" height="830" class="d-flex" xl="4" lg="3" md="3" sm="12" cols="12" >
+  <div>
+  <v-carousel       
+      :continuous="false"
+      :show-arrows="false"
+      hide-delimiter-background
+      delimiter-icon="mdi-minus"
+      height="800px" 
+      class="mt-5">
+      
     <v-carousel-item
       v-for="(item,i) in items"
       :key="i"
       :src="item.src"
     ></v-carousel-item>
   </v-carousel>
-    </div>
-  </v-container>
+  </div>
 </template>
 
 <script>
+  import api from "@/services/api";
   export default {
+  mounted() {
+    if (api.isLoggedIn()) {
+      this.$router.push("/profile");
+    }
+  },
     data () {
       return {
         items: [

@@ -36,8 +36,8 @@ export default {
   data: () => ({
     //  
     items: [
-      { text: "Engineer & Management", icon: "mdi-account-circle-outline" ,link: "/option_job" },
-      { text: "Production", icon: "mdi-account-cog-outline",link: "/option_job" }
+      { text: "Engineer & Management", icon: "mdi-account-circle-outline" ,link: "/register_engineer" },
+      { text: "Production", icon: "mdi-account-cog-outline",link: "/register_production" }
     ],
   }),
   methods: {
