@@ -6,7 +6,7 @@ export const NOT_CONNECT_NETWORK = "NOT_CONNECT_NETWORK";
 
 export const apiUrl = "http://18.216.154.172";
 export const imageUrl = "http://18.216.154.172/images";
-export const resumeUrl = "http://18.216.154.172/resume"
+export const resumeUrl = "http://18.216.154.172/resume";
 
 
 export const server = {
